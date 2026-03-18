@@ -3,7 +3,7 @@
 > **Biến AI coding assistant thành hệ thống tự học** — mỗi session code, debug, refactor đều tạo ra knowledge mới. AI không bao giờ mắc lại cùng 1 lỗi.
 
 [![Made with Antigravity](https://img.shields.io/badge/Made_with-Antigravity_IDE-blueviolet?style=for-the-badge)](https://github.com/hungpixi)
-[![Skills](https://img.shields.io/badge/Skills-6_Active-green?style=for-the-badge)](#-6-skill-modules)
+[![Skills](https://img.shields.io/badge/Skills-7_Active-green?style=for-the-badge)](#-7-skill-modules)
 [![Patterns](https://img.shields.io/badge/Patterns-41_Initial-orange?style=for-the-badge)](#-tổng-hợp)
 
 ## 🎯 Vấn Đề Giải Quyết
@@ -39,7 +39,7 @@
     │               │                 │
     ▼               ▼                 ▼
 ┌──────────────────────────────────────────────┐
-│           6 Skill Files (Auto-Append)        │
+│           7 Skill Files (Auto-Append)        │
 │                                              │
 │  📋 bug-fix-patterns   21 patterns (TIL)     │
 │  📝 adr-decisions       3 decisions (ADR)    │
@@ -47,12 +47,13 @@
 │  ⚡ performance-playbook 3 patterns          │
 │  🔍 code-smell-catalog   5 smells            │
 │  🎯 prompt-patterns      5 patterns          │
+│  ⏱️ session-analytics    per-session report  │
 │                                              │
 │  Total: 41 entries từ audit 14 dự án thực tế │
 └──────────────────────────────────────────────┘
 ```
 
-## 🧠 7 Self-Learning Models
+## 🧠 7 Self-Learning Models + Session Analytics
 
 | # | Model | Trigger | Khi nào | Ví dụ |
 |---|-------|---------|---------|-------|
@@ -63,8 +64,9 @@
 | 5 | **Performance** | Optimize có metrics | `/code` optimize | 10s → 100ms, logged |
 | 6 | **Code Smell** | Pattern xấu khi review | `/refactor` | Global Flag Orchestra |
 | 7 | **Prompt** | Prompt hiệu quả đáng kể | Meta-optimization | 3-Round Self-Review |
+| 📊 | **Session Analytics** | Cuối mỗi session | Tự động | 30 phút, 79% AI, ⭐⭐⭐⭐⭐ |
 
-## 📦 6 Skill Modules
+## 📦 7 Skill Modules
 
 ### 1. `bug-fix-patterns/` — TIL (21 patterns)
 Tổng hợp bug patterns từ audit 14 dự án thực tế:
@@ -101,6 +103,18 @@ Chủ động phòng tránh:
 - Search-Before-Code, 3-Round Self-Review
 - Critic-Then-Fix (+60% bug detection)
 - Instrument-Aware Defaults, Grep-After-Write
+
+### 7. `session-analytics/` — ⏱️ Đo Lường Hiệu Quả (NEW)
+Tự động tạo report cuối mỗi phiên:
+- Phân bổ thời gian: AI Work vs User Think vs Discussion
+- Deliverables count, tốc độ (files/phút)
+- Rating ⭐ system (1-5 sao)
+- Session changelog tích lũy theo thời gian
+
+**Demo — Session đầu tiên (2026-03-18)**:
+```
+⏱️ 30 phút | 🤖 79% AI Work | 7 deliverables | 0.67 files/phút | ⭐⭐⭐⭐⭐
+```
 
 ## 🔬 Quá Trình Tư Duy
 
@@ -147,7 +161,7 @@ Thêm Self-Learning hooks vào workflows hiện tại (xem `examples/workflow-ho
 
 | Metric | Giá trị |
 |--------|---------|
-| Skill files | 6 |
+| Skill files | 7 |
 | Total entries (ban đầu) | 41 |
 | Bug patterns | 21 |
 | ADR decisions | 3 |
@@ -155,12 +169,14 @@ Thêm Self-Learning hooks vào workflows hiện tại (xem `examples/workflow-ho
 | Performance patterns | 3 |
 | Code smells | 5 |
 | Prompt patterns | 5 |
+| Session analytics | ✅ (tự tạo report mỗi phiên) |
 | Workflows updated | 4 (code, debug, refactor, review) |
 | Source conversations | 14 |
 
 ## 🗺️ Hướng Đi Tương Lai
 
-- [ ] **Auto-analytics**: Đếm số TIL entries/tuần, track growth rate
+- [x] **Session analytics**: Đo lường hiệu quả mỗi phiên ✅
+- [ ] **Weekly digest**: Tổng hợp TIL entries/tuần, track growth rate
 - [ ] **Cross-referencing**: Link patterns liên quan giữa các skills (smell → bug → fix)
 - [ ] **Priority scoring**: Rank patterns theo tần suất trigger
 - [ ] **Export to Obsidian**: Sync với knowledge graph
