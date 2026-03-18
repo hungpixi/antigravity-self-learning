@@ -19,14 +19,14 @@ Trước khi chọn bất kỳ thư viện/framework nào cho dự án:
 Hầu hết dự án đều ở mức quy mô lớn. LUÔN LUÔN áp dụng:
 
 1. KHÔNG viết lại cả file — Chỉ edit đúng phần cần sửa
-2. Tách nhỏ mọi thay đổi — Mỗi edit ≤100 dòng
-3. File mới >300 dòng → viết skeleton trước → fill từng function
+2. Tách nhỏ mọi thay đổi — Mỗi edit ≤300 dòng
+3. File mới >500 dòng → viết skeleton trước → fill từng function
 4. 1 task = 1 file — Sửa xong file A → verify → sửa file B
 5. Verify sau mỗi edit — chạy compile/build/test
 6. Khi gặp API limit → DỪNG, tách task nhỏ hơn
 
 Anti-patterns TUYỆT ĐỐI TRÁNH:
-- ❌ write_to_file overwrite file 500+ dòng
+- ❌ write_to_file overwrite file 800+ dòng
 - ❌ Edit 10 functions cùng 1 lần
 - ✅ Edit 1-2 functions → verify → edit tiếp
 - ✅ Viết skeleton → fill function A → verify → fill function B
