@@ -97,6 +97,22 @@ grep -rn "functionName" --include="*.ext"
 
 ---
 
+### PP-006: Micro-Edit Protocol
+
+> 📅 2026-03-18 — Context: Dự án lớn (>300 dòng/file)
+
+**Problem**: AI viết lại cả file 500+ dòng → API timeout/fail, mất code, không review được
+**Pattern**:
+1. KHÔNG `write_to_file` overwrite file đã tồn tại
+2. Dùng `replace_file_content` sửa đúng phần cần sửa (≤100 dòng/edit)
+3. File mới >300 dòng → viết skeleton trước → fill từng function
+4. Sửa xong 1 file → verify → sửa file tiếp
+5. Khi gặp API limit → DỪNG, tách nhỏ hơn
+**Result**: 0 API failures, mỗi edit reviewable, rollback dễ dàng
+**When to use**: MỌI lúc — đặc biệt khi file >200 dòng hoặc sửa >3 functions
+
+---
+
 ## 📋 Pattern Changelog
 
 | # | Ngày | Pattern | Impact |
@@ -106,5 +122,6 @@ grep -rn "functionName" --include="*.ext"
 | 003 | 2026-03-18 | Critic-Then-Fix | +60% bug detection |
 | 004 | 2026-03-18 | Instrument-Aware Defaults | Bot works first try |
 | 005 | 2026-03-18 | Grep-After-Write | 0 dead functions |
+| 006 | 2026-03-18 | Micro-Edit Protocol | 0 API failures |
 
 <!-- PP_APPEND_MARKER — AI append pattern mới TRƯỚC dòng này -->
