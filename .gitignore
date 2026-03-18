@@ -1,0 +1,9 @@
+.env
+context.md
+*.key
+*.secret
+*.pem
+GEMINI.md
+.brain/
+node_modules/
+__pycache__/
