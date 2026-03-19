@@ -3,7 +3,7 @@
 > **Biến AI coding assistant thành hệ thống tự học** — mỗi session code, debug, refactor đều tạo ra knowledge mới. AI không bao giờ mắc lại cùng 1 lỗi.
 
 [![Made with Antigravity](https://img.shields.io/badge/Made_with-Antigravity_IDE-blueviolet?style=for-the-badge)](https://github.com/hungpixi)
-[![Skills](https://img.shields.io/badge/Skills-8_Active-green?style=for-the-badge)](#-8-skill-modules)
+[![Skills](https://img.shields.io/badge/Skills-9_Active-green?style=for-the-badge)](#-9-skill-modules)
 [![Patterns](https://img.shields.io/badge/Patterns-56+-orange?style=for-the-badge)](#-tổng-hợp)
 [![PyPI](https://img.shields.io/badge/pip_install-antigravity--learn-blue?style=for-the-badge)](#-cài-đặt)
 
@@ -72,7 +72,7 @@ antigravity-learn version   # Show version
     │               │                 │
     ▼               ▼                 ▼
 ┌──────────────────────────────────────────────┐
-│           8 Skill Files (Auto-Append)        │
+│           9 Skill Files (Auto-Append)        │
 │                                              │
 │  🐛 bug-fix-patterns    24 patterns (TIL)    │
 │  📝 adr-decisions        3 decisions (ADR)   │
@@ -80,10 +80,11 @@ antigravity-learn version   # Show version
 │  ⚡ performance-playbook  3 patterns         │
 │  🔍 code-smell-catalog    5 smells           │
 │  🎯 prompt-patterns       5 patterns         │
-│  🕷️ crawler-patterns     12 patterns (NEW)   │
+│  🕷️ crawler-patterns     12 patterns         │
+│  ⚡ antigravity-cdp-fix   auto-fix script    │
 │  ⏱️ session-analytics    per-session report   │
 │                                              │
-│  Total: 56+ entries from 14+ real projects   │
+│  Total: 57+ entries from 14+ real projects   │
 └──────────────────────────────────────────────┘
 ```
 
@@ -100,7 +101,7 @@ antigravity-learn version   # Show version
 | 7 | **Prompt** | Prompt hiệu quả đáng kể | Meta-optimization | 3-Round Self-Review |
 | 📊 | **Session Analytics** | Cuối mỗi session | Tự động | 30 phút, 79% AI, ⭐⭐⭐⭐⭐ |
 
-## 📦 8 Skill Modules
+## 📦 9 Skill Modules
 
 ### 1. `bug-fix-patterns/` — 24 patterns ⬆️
 Tổng hợp bug patterns từ 14+ dự án thực tế:
@@ -147,7 +148,13 @@ Extracted từ [MediaCrawler](https://github.com/NanmiCoder/MediaCrawler) (24k+ 
 - **CP-011**: Hybrid Browser+HTTP architecture
 - **CP-012**: uv-based project setup
 
-### 8. `session-analytics/` — Per-Session Reports
+### 8. `antigravity-cdp-fix/` — Auto-Fix CDP Port 🆕
+Tự động sửa lỗi "Multi Purpose Agent could not connect to CDP port 9004":
+- Script PowerShell tự detect + fix tất cả Antigravity shortcuts
+- Install 1 lần → auto-fix mỗi lần Windows boot
+- Kèm standalone repo: [hungpixi/antigravity-cdp-fix](https://github.com/hungpixi/antigravity-cdp-fix)
+
+### 9. `session-analytics/` — Per-Session Reports
 - Phân bổ thời gian: AI Work vs User Think
 - Deliverables count, tốc độ (files/phút)
 - Rating ⭐ system (1-5)
@@ -182,11 +189,12 @@ Audit [MediaCrawler](https://github.com/NanmiCoder/MediaCrawler) → 20+ files �
 
 | Metric | v1.0 | v2.0 |
 |--------|------|------|
-| Skill modules | 7 | **8** |
-| Total patterns | 41 | **56+** |
+| Skill modules | 7 | **9** |
+| Total patterns | 41 | **57+** |
 | Install method | `cp -r` | `pip install` / `uv` |
 | CLI tool | ❌ | ✅ (`antigravity-learn`) |
 | Crawler patterns | ❌ | **12 patterns** |
+| CDP auto-fix | ❌ | **Script + Startup** |
 | Bug patterns | 21 | **24** |
 | Runbooks | 5 | **7** |
 
@@ -220,6 +228,7 @@ Audit [MediaCrawler](https://github.com/NanmiCoder/MediaCrawler) → 20+ files �
 | Không lặp lại sai lầm cũ | TIL + RCA auto-append (24 patterns) |
 | Chọn tech đúng từ đầu | Tech Radar + ADR system |
 | Build crawler chuyên nghiệp | 12 production patterns từ codebase 24k⭐ |
+| Fix lỗi IDE tự động | CDP port fix — set-and-forget |
 | Cài đặt 1 lệnh | `pip install` + `antigravity-learn install` |
 
 ### 📞 Liên hệ
