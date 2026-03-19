@@ -398,6 +398,71 @@ try {
 
 ---
 
+### 🟠 P22: PyPI Mirror (tuna/Trung Quốc) Gây Download Fail
+
+> 📅 TIL 2026-03-19 — Dự án: MediaCrawler setup
+
+**Pattern**: Project Trung Quốc dùng `[[tool.uv.index]]` trỏ về tuna.tsinghua.edu.cn → fail download khi chạy từ VN/nước khác.
+
+```toml
+# ❌ BUG — pyproject.toml
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+# ✅ FIX — Xóa block trên + xóa uv.lock + chạy lại
+# rm uv.lock && uv lock && uv sync
+```
+
+**Rule**: **Khi clone project Trung Quốc, CHECK `pyproject.toml` và `uv.lock` cho tuna/aliyun mirror → xóa trước khi `uv sync`.**
+
+---
+
+### 🟠 P23: Windows stdout Encoding Gây Crash Khi Print Unicode
+
+> 📅 TIL 2026-03-19 — Dự án: MediaCrawler
+
+**Pattern**: Terminal Windows dùng encoding khác UTF-8 → crash khi print tiếng Trung/Việt.
+
+```python
+# ✅ FIX — Đặt ở TOP file, TRƯỚC mọi import khác
+import sys, io
+if sys.stdout and hasattr(sys.stdout, 'buffer'):
+    if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+```
+
+**Rule**: **Mọi Python CLI app xử lý Unicode nên force UTF-8 stdout đầu file.**
+
+---
+
+### 🟠 P24: Playwright CDP Browser Process Leak
+
+> 📅 TIL 2026-03-19 — Dự án: MediaCrawler
+
+**Pattern**: CDP mode launch browser subprocess → nếu app crash/Ctrl+C, browser process zombie.
+
+```python
+# ✅ FIX — Register cleanup ở 3 nơi:
+import atexit, signal
+
+# 1. atexit
+atexit.register(lambda: launcher.cleanup())
+
+# 2. signal handlers (SIGINT, SIGTERM)  
+signal.signal(signal.SIGINT, lambda s, f: launcher.cleanup())
+
+# 3. try/finally trong main flow
+try:
+    await app_main()
+finally:
+    await asyncio.wait_for(cleanup(), timeout=15.0)  # BOUNDED cleanup
+```
+
+**Rule**: **Subprocess nào launch → PHẢI cleanup ở atexit + signal + finally. Cleanup phải có TIMEOUT.**
+
+---
+
 ## CATEGORY 6: PostgreSQL / Database
 
 ### 🟠 P21: Remote PostgreSQL Timeout (~10-12s)
@@ -555,5 +620,8 @@ Step 5: UPDATE METADATA
 | # | Ngày | Pattern | Dự án | Severity |
 |---|------|---------|-------|----------|
 | — | 2026-03-18 | P1-P21 (Initial audit) | 14 conversations | Mixed |
+| P22 | 2026-03-19 | PyPI Mirror Download Fail | MediaCrawler | 🟠 |
+| P23 | 2026-03-19 | Windows stdout UTF-8 | MediaCrawler | 🟠 |
+| P24 | 2026-03-19 | Playwright CDP Cleanup Leak | MediaCrawler | 🟠 |
 
 <!-- TIL_APPEND_MARKER — AI append dòng mới vào bảng trên, TRƯỚC dòng này -->

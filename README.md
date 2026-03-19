@@ -3,8 +3,42 @@
 > **Biến AI coding assistant thành hệ thống tự học** — mỗi session code, debug, refactor đều tạo ra knowledge mới. AI không bao giờ mắc lại cùng 1 lỗi.
 
 [![Made with Antigravity](https://img.shields.io/badge/Made_with-Antigravity_IDE-blueviolet?style=for-the-badge)](https://github.com/hungpixi)
-[![Skills](https://img.shields.io/badge/Skills-7_Active-green?style=for-the-badge)](#-7-skill-modules)
-[![Patterns](https://img.shields.io/badge/Patterns-41_Initial-orange?style=for-the-badge)](#-tổng-hợp)
+[![Skills](https://img.shields.io/badge/Skills-8_Active-green?style=for-the-badge)](#-8-skill-modules)
+[![Patterns](https://img.shields.io/badge/Patterns-56+-orange?style=for-the-badge)](#-tổng-hợp)
+[![PyPI](https://img.shields.io/badge/pip_install-antigravity--learn-blue?style=for-the-badge)](#-cài-đặt)
+
+## 🚀 Cài Đặt
+
+### Cách 1: `pip install` (Recommended)
+
+```bash
+pip install git+https://github.com/hungpixi/antigravity-self-learning.git
+
+# Install skills vào Antigravity IDE
+antigravity-learn install
+```
+
+### Cách 2: `uv` (Faster)
+
+```bash
+uv tool install git+https://github.com/hungpixi/antigravity-self-learning.git
+
+# Hoặc clone + run
+git clone https://github.com/hungpixi/antigravity-self-learning.git
+cd antigravity-self-learning
+uv sync
+uv run antigravity-learn install
+```
+
+### CLI Commands
+
+```bash
+antigravity-learn install   # 📦 Cài skills vào ~/.gemini/antigravity/skills/
+antigravity-learn sync      # 🔄 Update skills, thêm mới, giữ custom entries
+antigravity-learn status    # 📊 Xem stats: bao nhiêu patterns, size, etc.
+antigravity-learn export    # 📤 Export tất cả patterns ra 1 file markdown
+antigravity-learn version   # Show version
+```
 
 ## 🎯 Vấn Đề Giải Quyết
 
@@ -14,7 +48,7 @@
 | Fix bug xong quên ngay | Bug lặp lại 2-3 lần | TIL auto-append → không bao giờ lặp |
 | Mỗi session hỏi lại quy trình | "Compile MQL5 bằng gì?" lần thứ 5 | Runbook ghi sẵn → AI tự theo |
 | Chọn tech rồi đổi ý | SQLAlchemy → psycopg2 → SQLAlchemy → ... | ADR log quyết định → không flip-flop |
-| Code mới nhưng lỗi cũ | Partial close lot quá nhỏ → infinite loop | Code Smell Catalog cảnh báo trước |
+| Build crawler không biết best practice | Copy-paste spaghetti | 12 production patterns từ MediaCrawler (24k⭐) |
 
 ## 🏗️ Kiến Trúc
 
@@ -32,24 +66,24 @@
     ▼                 ▼                 ▼
 ┌────────┐    ┌────────────┐    ┌────────────┐
 │ /code  │    │  /debug    │    │ /refactor  │
-│ §6.1   │    │  §5.1      │    │ §6.1       │
-│ Self-  │    │  TIL/RCA   │    │ Code Smell │
-│ Learn  │    │  Update    │    │ Update     │
+│ Self-  │    │  TIL/RCA   │    │  Code Smell│
+│ Learn  │    │  Update    │    │  Update    │
 └───┬────┘    └─────┬──────┘    └─────┬──────┘
     │               │                 │
     ▼               ▼                 ▼
 ┌──────────────────────────────────────────────┐
-│           7 Skill Files (Auto-Append)        │
+│           8 Skill Files (Auto-Append)        │
 │                                              │
-│  📋 bug-fix-patterns   21 patterns (TIL)     │
-│  📝 adr-decisions       3 decisions (ADR)    │
-│  🏃 runbooks            4 runbooks           │
-│  ⚡ performance-playbook 3 patterns          │
-│  🔍 code-smell-catalog   5 smells            │
-│  🎯 prompt-patterns      5 patterns          │
-│  ⏱️ session-analytics    per-session report  │
+│  🐛 bug-fix-patterns    24 patterns (TIL)    │
+│  📝 adr-decisions        3 decisions (ADR)   │
+│  🏃 runbooks             7 runbooks          │
+│  ⚡ performance-playbook  3 patterns         │
+│  🔍 code-smell-catalog    5 smells           │
+│  🎯 prompt-patterns       5 patterns         │
+│  🕷️ crawler-patterns     12 patterns (NEW)   │
+│  ⏱️ session-analytics    per-session report   │
 │                                              │
-│  Total: 41 entries từ audit 14 dự án thực tế │
+│  Total: 56+ entries from 14+ real projects   │
 └──────────────────────────────────────────────┘
 ```
 
@@ -57,129 +91,113 @@
 
 | # | Model | Trigger | Khi nào | Ví dụ |
 |---|-------|---------|---------|-------|
-| 1 | **TIL** | Fix bug thành công | `/debug` xong | Đệ quy vô hạn → append P22 |
+| 1 | **TIL** | Fix bug thành công | `/debug` xong | PyPI mirror fail → append P22 |
 | 2 | **ADR** | Chọn tech/architecture | `/code` chọn lib | pandas-ta > TA-Lib, logged |
-| 3 | **Runbook** | Task lặp lại >3 bước | Deploy, compile | MQL5 compile → 7 steps |
+| 3 | **Runbook** | Task lặp lại >3 bước | Deploy, compile | Clone Chinese project → 8 steps |
 | 4 | **RCA** | Bug tái phát lần 2+ | `/debug` lần 2 | 5 Whys → root cause |
 | 5 | **Performance** | Optimize có metrics | `/code` optimize | 10s → 100ms, logged |
 | 6 | **Code Smell** | Pattern xấu khi review | `/refactor` | Global Flag Orchestra |
 | 7 | **Prompt** | Prompt hiệu quả đáng kể | Meta-optimization | 3-Round Self-Review |
 | 📊 | **Session Analytics** | Cuối mỗi session | Tự động | 30 phút, 79% AI, ⭐⭐⭐⭐⭐ |
 
-## 📦 7 Skill Modules
+## 📦 8 Skill Modules
 
-### 1. `bug-fix-patterns/` — TIL (21 patterns)
-Tổng hợp bug patterns từ audit 14 dự án thực tế:
+### 1. `bug-fix-patterns/` — 24 patterns ⬆️
+Tổng hợp bug patterns từ 14+ dự án thực tế:
 - 🔴 Đệ quy vô hạn, State không reset
-- 🟠 Hardcode values, Guard conditions thiếu, Partial close overflow
+- 🟠 PyPI mirror download fail, Windows UTF-8 encoding, CDP process leak
 - Kèm debug checklist 12 bước và 10 anti-pattern rules
 
-### 2. `adr-decisions/` — Architecture Decisions (3 entries)
-Log quyết định tech đã làm:
+### 2. `adr-decisions/` — 3 Architecture Decisions
 - pandas-ta > TA-Lib (cross-platform)
 - psycopg2 pool > SQLAlchemy (lightweight)
 - OpenClaw > LangGraph/CrewAI (simple API)
 
-### 3. `runbooks/` — Operational Procedures (4 entries)
-Quy trình chuẩn hóa:
+### 3. `runbooks/` — 7 Operational Procedures ⬆️
 - MQL5 Compile & Backtest (7 steps)
 - GitHub Push Portfolio (6 steps + security check)
-- Netlify Deploy (4 steps)
-- n8n Workflow Setup (5 steps)
+- **Clone Chinese Python Projects (8 steps)** 🆕
+- **Playwright CDP Crawler Setup (6 steps)** 🆕
 
-### 4. `performance-playbook/` — Optimization Patterns (3 entries)
-Có metrics before/after:
+### 4. `performance-playbook/` — 3 patterns
 - Connection Pooling: 10-12s → <100ms
-- PineScript Lookback Limit: labels fix + performance
-- Cache GetPipPoint: 60 calls/min → 1 call
+- PineScript Lookback Limit
+- Cache GetPipPoint: 60 calls/min → 1
 
-### 5. `code-smell-catalog/` — Code Smells (5 entries)
-Chủ động phòng tránh:
-- Global Flag Orchestra (>5 booleans → enum state machine)
-- Dead Function (viết nhưng không gọi)
+### 5. `code-smell-catalog/` — 5 Code Smells
+- Global Flag Orchestra, Dead Function
 - Close Without Reset, Partial No Fallback
 
-### 6. `prompt-patterns/` — AI Meta-Optimization (5 entries)
+### 6. `prompt-patterns/` — 5 AI Meta-Optimization
 - Search-Before-Code, 3-Round Self-Review
 - Critic-Then-Fix (+60% bug detection)
-- Instrument-Aware Defaults, Grep-After-Write
 
-### 7. `session-analytics/` — ⏱️ Đo Lường Hiệu Quả (NEW)
-Tự động tạo report cuối mỗi phiên:
-- Phân bổ thời gian: AI Work vs User Think vs Discussion
+### 7. `crawler-patterns/` — 12 patterns 🆕
+Extracted từ [MediaCrawler](https://github.com/NanmiCoder/MediaCrawler) (24k+ ⭐):
+- **CP-001**: Factory + ABC multi-platform architecture
+- **CP-002**: Playwright CDP mode — dùng Chrome thật
+- **CP-003**: Anti-detection stack (stealth.js + flags + persistent context)
+- **CP-004**: Semaphore-controlled async concurrency
+- **CP-005**: Graceful shutdown with timeout
+- **CP-006**: Proxy IP pool with auto-refresh
+- **CP-007**: Multi-storage Factory (7 backends)
+- **CP-008**: Cross-OS browser detection
+- **CP-009**: Slider CAPTCHA auto-solve (OpenCV)
+- **CP-010**: ContextVar for async-safe state
+- **CP-011**: Hybrid Browser+HTTP architecture
+- **CP-012**: uv-based project setup
+
+### 8. `session-analytics/` — Per-Session Reports
+- Phân bổ thời gian: AI Work vs User Think
 - Deliverables count, tốc độ (files/phút)
-- Rating ⭐ system (1-5 sao)
-- Session changelog tích lũy theo thời gian
-
-**Demo — Session đầu tiên (2026-03-18)**:
-```
-⏱️ 30 phút | 🤖 79% AI Work | 7 deliverables | 0.67 files/phút | ⭐⭐⭐⭐⭐
-```
+- Rating ⭐ system (1-5)
 
 ## 🔬 Quá Trình Tư Duy
 
-### Tại sao không chỉ dùng documentation thông thường?
+### v2.0: Từ "copy files" → "pip install"
 
-Documentation **tĩnh** — viết 1 lần, quên update. Hệ thống này **động**:
+**Vấn đề v1**: Cài đặt = `cp -r skills/* ~/.gemini/...` — thủ công, dễ quên, không version.
 
-1. **Mỗi skill file có `APPEND_MARKER`** — AI append entries mới tự động, không sửa entries cũ
-2. **TIL Protocol kiểm tra 3 điều kiện** trước khi lưu: (1) fix thành công, (2) chưa có trong catalog, (3) đủ general để tái sử dụng
-3. **Workflows tích hợp hooks** — `/debug` xong tự trigger TIL check, `/code` xong tự trigger ADR check
-4. **Không lưu rác** — typo, import sai tên, lỗi 1 lần → bỏ qua
-
-### Nguồn dữ liệu ban đầu
-
-41 entries không phải "nghĩ ra" — được **audit từ 14 conversations và 12+ walkthroughs** thực tế:
-- Trading bots: IchiDCA, CCBSN, ICT System EA
-- Web: comarai.com, BizClaw, VietFi
-- Python: moondev-agent, telegram-copy-signal
-- Scripting: BDR Kit installer
-
-## 🚀 Cách Sử Dụng
-
-### Cài đặt cho Antigravity IDE
-
+**Giải pháp v2**: Đóng gói thành Python package:
 ```bash
-# Clone repo
-git clone https://github.com/hungpixi/antigravity-self-learning.git
-
-# Copy skills vào Antigravity
-cp -r skills/* ~/.gemini/antigravity/skills/
+pip install git+https://github.com/hungpixi/antigravity-self-learning.git
+antigravity-learn install  # 1 command, xong.
 ```
 
-### Thêm vào GEMINI.md (Global Rules)
+**Học từ MediaCrawler**: Dùng `uv` + `pyproject.toml` thay vì `setup.py` + `requirements.txt`.
 
-Copy 2 blocks từ `examples/gemini-rules.md` vào `~/.gemini/GEMINI.md`:
-- **Tech Radar** — chống dùng công nghệ cũ
-- **Self-Learning Protocol** — bảng 7 models với triggers
+### Tại sao thêm crawler-patterns?
 
-### Cập nhật Workflows
+Audit [MediaCrawler](https://github.com/NanmiCoder/MediaCrawler) → 20+ files → rút ra 12 patterns production-grade. Không phải "nghĩ ra" — là **reverse-engineer từ project 24k stars**.
 
-Thêm Self-Learning hooks vào workflows hiện tại (xem `examples/workflow-hooks.md`).
+### Nguồn dữ liệu
+
+| Source | Patterns |
+|--------|----------|
+| 14 project conversations (trading bots, web, Python) | 41 initial entries |
+| MediaCrawler codebase analysis (24k⭐) | 15 new entries |
+| **Total** | **56+** |
 
 ## 📊 Tổng Hợp
 
-| Metric | Giá trị |
-|--------|---------|
-| Skill files | 7 |
-| Total entries (ban đầu) | 41 |
-| Bug patterns | 21 |
-| ADR decisions | 3 |
-| Runbooks | 4 |
-| Performance patterns | 3 |
-| Code smells | 5 |
-| Prompt patterns | 5 |
-| Session analytics | ✅ (tự tạo report mỗi phiên) |
-| Workflows updated | 4 (code, debug, refactor, review) |
-| Source conversations | 14 |
+| Metric | v1.0 | v2.0 |
+|--------|------|------|
+| Skill modules | 7 | **8** |
+| Total patterns | 41 | **56+** |
+| Install method | `cp -r` | `pip install` / `uv` |
+| CLI tool | ❌ | ✅ (`antigravity-learn`) |
+| Crawler patterns | ❌ | **12 patterns** |
+| Bug patterns | 21 | **24** |
+| Runbooks | 5 | **7** |
 
 ## 🗺️ Hướng Đi Tương Lai
 
+- [x] **Package + CLI**: `pip install` thay vì copy files ✅
+- [x] **Crawler patterns**: 12 patterns từ MediaCrawler ✅
 - [x] **Session analytics**: Đo lường hiệu quả mỗi phiên ✅
-- [ ] **Weekly digest**: Tổng hợp TIL entries/tuần, track growth rate
-- [ ] **Cross-referencing**: Link patterns liên quan giữa các skills (smell → bug → fix)
-- [ ] **Priority scoring**: Rank patterns theo tần suất trigger
-- [ ] **Export to Obsidian**: Sync với knowledge graph
+- [ ] **PyPI publish**: `pip install antigravity-learn` (không cần GitHub URL)
+- [ ] **Weekly digest**: Tổng hợp TIL entries/tuần
+- [ ] **Cross-referencing**: Link patterns giữa skills (smell → bug → fix)
 - [ ] **Team sharing**: Merge skill files từ nhiều developers
 
 ---
@@ -189,7 +207,8 @@ Thêm Self-Learning hooks vào workflows hiện tại (xem `examples/workflow-ho
 - **Author**: [Phạm Phú Nguyễn Hưng](https://github.com/hungpixi)
 - **Company**: [Comarai](https://comarai.com) — Companion for Marketing & AI Automation
 - **Built with**: [Antigravity IDE](https://github.com/google-deepmind) by Google DeepMind
-- **Source data**: 14 real project conversations, 12+ walkthroughs
+- **Crawler patterns source**: [NanmiCoder/MediaCrawler](https://github.com/NanmiCoder/MediaCrawler) (24k+ ⭐)
+- **Source data**: 14+ real project conversations, 12+ walkthroughs
 
 ---
 
@@ -197,11 +216,11 @@ Thêm Self-Learning hooks vào workflows hiện tại (xem `examples/workflow-ho
 
 | Bạn cần | Chúng tôi đã làm ✅ |
 |---------|---------------------|
-| AI coding assistant thông minh hơn | 7 self-learning models tích hợp |
-| Không lặp lại sai lầm cũ | TIL + RCA auto-append |
+| AI coding assistant thông minh hơn | 8 self-learning models tích hợp |
+| Không lặp lại sai lầm cũ | TIL + RCA auto-append (24 patterns) |
 | Chọn tech đúng từ đầu | Tech Radar + ADR system |
-| Quy trình chuẩn hóa | Runbook auto-capture |
-| Code review tự động | Code Smell Catalog |
+| Build crawler chuyên nghiệp | 12 production patterns từ codebase 24k⭐ |
+| Cài đặt 1 lệnh | `pip install` + `antigravity-learn install` |
 
 ### 📞 Liên hệ
 
