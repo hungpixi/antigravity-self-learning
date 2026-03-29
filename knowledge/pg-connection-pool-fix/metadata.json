@@ -1,0 +1,18 @@
+{
+    "title": "PostgreSQL Remote Latency Fix — Connection Pooling",
+    "summary": "Khi dùng PostgreSQL remote (VPS Nhật), mỗi request tạo TCP connection mới → latency 10-12s. Fix bằng psycopg2 SimpleConnectionPool để giữ connections sẵn, giảm xuống <100ms.",
+    "created_at": "2026-02-28T12:21:00+07:00",
+    "updated_at": "2026-02-28T12:21:00+07:00",
+    "tags": [
+        "postgresql",
+        "latency",
+        "connection-pool",
+        "psycopg2",
+        "performance"
+    ],
+    "references": [
+        "telegram-copy-signal project",
+        "free-dev-resources KI"
+    ],
+    "usage_notes": "Apply cho BẤT KỲ project nào dùng psycopg2 với remote PostgreSQL. Lỗi này tái diễn >2 lần."
+}

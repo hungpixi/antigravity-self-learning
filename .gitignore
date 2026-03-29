@@ -1,0 +1,36 @@
+# Sensitive Credentials
+credentials.md
+mcp.json
+mcp_config.json
+installation_id
+.env
+*.env
+*.key
+context.md
+*.pem
+
+# Session Data & Memory
+brain/
+conversations/
+context_state/
+implicit/
+
+# Caches & Logs
+__pycache__/
+*.log
+*.csv
+*.txt
+
+# Exclude specific files
+docs_candidates.csv
+formatted_inputs.txt
+mql5_inputs.txt
+
+# Large binaries and archives
+*.exe
+*.dll
+*.zip
+*.rar
+*.7z
+*.mp4
+*.pdf

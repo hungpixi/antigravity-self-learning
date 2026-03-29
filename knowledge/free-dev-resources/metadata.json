@@ -1,0 +1,16 @@
+{
+    "title": "Free Dev Resources (hoctuthien.com Community Server)",
+    "summary": "Free shared dev resources cho development/testing. VPS 6 Core, 12GB RAM, 100GB SSD, Nhật Bản. Bao gồm: PostgreSQL, MySQL, Redis, MinIO S3, Drizzle Studio, RedisInsight, Coolify, Affine. Luật: KHÔNG đổi mật khẩu, CHỈ dùng dev/test.",
+    "created_at": "2026-02-28T11:47:00Z",
+    "updated_at": "2026-02-28T11:47:00Z",
+    "tags": [
+        "dev-resources",
+        "database",
+        "redis",
+        "s3",
+        "free",
+        "community"
+    ],
+    "references": [],
+    "usage_notes": "Dùng cho mọi project non-sensitive. Tạo DB riêng trong PostgreSQL/MySQL để tránh conflict. Thỉnh thoảng admin sẽ clear data khi đầy ổ cứng."
+}
