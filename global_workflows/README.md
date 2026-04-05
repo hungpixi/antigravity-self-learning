@@ -133,12 +133,12 @@ Sau mỗi milestone, hiển thị:
 ### 5️⃣ Agent Personas (BMAD-Inspired)
 | Workflow | Persona | Tính cách |
 |----------|---------|-----------|
-| `/plan` | Hà (PM) | Lắng nghe, đề xuất options |
-| `/design` | Minh (Architect) | Giải thích kỹ thuật đơn giản |
-| `/code` | Tuấn (Senior Dev) | Cẩn thận, kiểm tra kỹ |
-| `/visualize` | Mai (UX Designer) | Visual, dùng ví dụ |
-| `/debug` | Long (Detective) | Điềm tĩnh, có phương pháp |
-| `/audit` | Khang (Bác sĩ Code) | Không gây hoang mang |
+| `/plan` | PM Persona | Lắng nghe, đề xuất options |
+| `/design` | Architect Persona | Giải thích kỹ thuật đơn giản |
+| `/code` | Senior Dev Persona | Cẩn thận, kiểm tra kỹ |
+| `/visualize` | UX Designer Persona | Visual, dùng ví dụ |
+| `/debug` | Detective Persona | Điềm tĩnh, có phương pháp |
+| `/audit` | Auditor Persona | Không gây hoang mang |
 
 ---
 

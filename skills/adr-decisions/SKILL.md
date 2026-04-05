@@ -1,11 +1,12 @@
 ---
 name: Architecture Decision Records (ADR)
-description: Log quyết định tech/architecture để tránh flip-flop. Auto-trigger khi chọn framework, library, database, design pattern. Triggers on "chọn framework", "dùng gì", "so sánh", "alternative", "tech stack", "nên dùng", "which library", "compare", "vs", "or".
+description: "Log quyết định tech/architecture để tránh flip-flop. Auto-trigger khi chọn framework, library, database, design pattern. Triggers on \"chọn framework\", \"dùng gì\", \"so sánh\", \"alternative\", \"tech stack\", \"nên dùng\", \"which library\", \"compare\", \"vs\", \"or\"."
 ---
 
 # 📝 Architecture Decision Records
 
 > Mỗi quyết định tech quan trọng được log ở đây. AI PHẢI check file này trước khi đề xuất tech mới — nếu đã có ADR cho quyết định tương tự → follow ADR, KHÔNG flip-flop.
+> **Memory Sync**: Khi tạo ADR mới liên quan stack/tool quan trọng → update `memory/reference_*.md` hoặc `memory/project_*.md` tương ứng.
 
 ## Format ADR Entry
 
@@ -79,8 +80,58 @@ description: Log quyết định tech/architecture để tránh flip-flop. Auto-
 | 005 | 2026-03-19 | localStorage cho MVP Gamification | vietfi-advisor |
 | 006 | 2026-03-21 | Vision OCR > DOM/APIs | tv-vision-ocr |
 | 007 | 2026-03-22 | Hybrid localStorage + Supabase sync | vietfi-advisor |
+| 008 | 2026-03-30 | Pure PowerShell > Batch file cho IDE relaunch | MPA Extension Fork |
+| 011 | 2026-04-04 | Private SaaS (Next.js/Celery) > Open Source CLI | Vactory.vn |
 
 <!-- ADR_APPEND_MARKER — AI append ADR mới TRƯỚC dòng này -->
+
+### ADR-011: Chuyển đổi mô hình KISS Engine Open Source thành Private SaaS (Vactory.vn)
+
+> 📅 2026-04-04 — Dự án: Vactory.vn (trước là KISS Engine)
+
+**Context**: Dự án auto video ban đầu thiết kế làm open-source CLI chạy local. Tuy nhiên, tính toán Unit Economics cho thấy chi phí vận hành RẤT rẻ ($0.01/video) nhưng user phổ thông không có / không biết setup GPU. Nếu đóng gói bán thương mại sẽ tạo MRR khổng lồ.
+**Options**:
+  - A: `Giữ Open Source CLI` — Pros: Được cộng đồng star Github / Cons: Khó kiếm tiền, user không setup nổi environment (CUDA, FFmpeg...).
+  - B: `Đóng gói thành Private SaaS Web App` — Pros: Ai cũng dùng được, charge tiền 5.000đ/video, Scale mạnh, target MRR 150M. / Cons: Tốn thêm công code Next.js frontend, Supabase Backend auth, Celery Queue.
+**Decision**: Chọn **B (Private SaaS)**. Kết hợp UI Web (Vercel) + Worker GPU (Colab Pro/GCP). Áp dụng chiến thuật Build In Public (BIP) để kéo users thay vì share source code.
+**Consequences**: ✅ Tiềm năng doanh thu rất mạnh / ✅ Tập trung đúng Pain Point của TikTokers MMO / ❌ Độ phức tạp hạ tầng tăng gấp 3 (Auth, Queue, Payment integration).
+**Status**: Active
+
+### ADR-010: Secrets chỉ ở User Env + context.md, không nằm trong rule/config markdown
+
+> 📅 2026-04-03 — Dự án: Gemini / Antigravity local workspace
+
+**Context**: `GEMINI.md` và `mcp_config.json` từng chứa token thô. Cách này khiến rule file thành điểm rò rỉ secret, khó rotate và dễ bị commit nhầm.
+**Options**:
+  - A: Giữ token trực tiếp trong rule/config — Pros: dùng ngay / Cons: rò rỉ cực nguy hiểm, vi phạm Zero Trust
+  - B: Chuyển token sang User Environment Variables, chỉ lưu tên biến trong `context.md` — Pros: sạch rule, dễ rotate, vẫn tự động / Cons: cần restart app sau khi set env
+**Decision**: Chọn **B**. Rule file chỉ giữ policy. `context.md` chỉ giữ mapping và runtime defaults. MCP wrappers đọc token từ user env.
+**Consequences**: ✅ Secret hygiene tốt hơn / ✅ Rule gọn hơn / ✅ Dễ bảo trì MCP / ❌ Cần restart Gemini/Codex để process mới nhận env
+**Status**: Active
+
+### ADR-009: Tránh khởi tạo Browser Instance mới — Dùng CDP Override (Port 9222)
+> 📅 2026-04-02 — Dự án: VEO_TOOL (Nghiên cứu mô hình Auto Video)
+
+**Context**: Hầu hết các trang tạo video như SORA, GOOGLE VEO, GROK chặn traffic có dấu vết headless/automation tools (Selenium, Puppeteer khởi tạo mới).
+**Options**:
+  - A: Dùng `Playwright/Puppeteer` chuẩn (tự spawn new browser context) — Pros: Clean state / Cons: Dính Fingerprint bot, bị chặn login Google/First-Run setup.
+  - B: Mở `chrome.exe` qua lệnh shell với port CDP 9222 độc lập — Pros: Giống 100% người thật, profile tách rời, không bị gắn cờ "Chrome is being controlled by automated software". Dùng Playwright `connect_over_cdp()` kết nối vào. / Cons: Khó quản lý Process kill/graceful exit hơn.
+**Decision**: Chọn **Cách B (CDP Override Port 9222)** kết hợp thư mục `--user-data-dir` riêng rẻ.
+**Consequences**: ✅ Bypass 100% Google Authentication Login block + Bypass Cloudflare / ❌ Quản lý vòng đời PID Chrome cực kỳ vất vả (phải parse tasklist Windows).
+**Status**: Active
+
+### ADR-008: Pure PowerShell thay Batch File cho Windows IDE Relaunch
+
+> 📅 2026-03-30 — Dự án: MPA Extension Fork (hungpixi-multi-purpose-agent)
+
+**Context**: Extension cần restart IDE với CDP flag. Cách cũ tạo `.bat` file rồi `Start-Process` → CMD window flash trên màn hình, và exe path hardcoded chỉ 1 location.
+**Options**:
+  - A: `Batch file (.bat)` — Pros: Simple, familiar / Cons: CMD popup flash, `ping` delay visible
+  - B: `Pure PowerShell spawn` — Pros: `windowsHide: true` + `-WindowStyle Hidden` = zero visual artifact / Cons: Slightly more complex
+  - C: `VBScript wrapper` — Pros: Truly invisible / Cons: Extra file, antivirus flags
+**Decision**: Chọn **Pure PowerShell** — `spawn('powershell.exe', [...], { windowsHide: true, detached: true })` với `Start-Sleep -Seconds 3` thay vì `ping 127.0.0.1 -n 4`. Multi-path search cho Antigravity.exe.
+**Consequences**: ✅ Zero CMD popup / ✅ Multi-path exe discovery / ❌ Slightly longer command
+**Status**: Active
 
 ### ADR-006: Vision OCR (EasyOCR) thay vì Web Scraping/Private APIs cho TradingView
 

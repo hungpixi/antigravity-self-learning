@@ -1,6 +1,6 @@
 ---
 name: Effective Prompt Patterns
-description: Meta-optimization - những prompt patterns cho AI output tốt hơn. Auto-trigger khi prompt engineering, cải thiện output, meta-optimization. Triggers on "prompt", "better output", "improve AI", "cách hỏi AI", "prompt engineering", "kết quả tốt hơn", "AI trả lời sai", "how to prompt".
+description: "Meta-optimization - những prompt patterns cho AI output tốt hơn. Auto-trigger khi prompt engineering, cải thiện output, meta-optimization. Triggers on \"prompt\", \"better output\", \"improve AI\", \"cách hỏi AI\", \"prompt engineering\", \"kết quả tốt hơn\", \"AI trả lời sai\", \"how to prompt\"."
 ---
 
 # 🎯 Effective Prompt Patterns
@@ -124,8 +124,35 @@ grep -rn "functionName" --include="*.ext"
 | 005 | 2026-03-18 | Grep-After-Write | 0 dead functions |
 | 006 | 2026-03-18 | Micro-Edit Protocol | 0 API failures |
 
-<!-- PP_APPEND_MARKER — AI append pattern mới TRƯỚC dòng này -->
+| 007 | 2026-04-02 | Veo 3 Consistent Character Prompt | Giữ ổn định khuôn mặt + Voice |
+| 008 | 2026-04-04 | Intermediate Developer Automation Persona | Tăng tốc thực thi Workflow CI/CD |
 
+### PP-008: Tự động hóa triệt để CI/CD (Bỏ Progressive Disclosure cho Dev Giỏi)
+
+> 📅 2026-04-04 — Context: Kích hoạt các Workflow hệ thống thay làm việc (như `/deploy`, `/audit`)
+
+**Problem**: Thiết kế AI Workflow mô phỏng "Bác sĩ" hoặc "Newbie Guide" hỏi quá nhiều (dùng progressive disclosure, hỏi từng câu một) làm chậm tốc độ làm việc thực sự của Dev đã có nền tảng. User phát bực vì AI giải thích SSL hay DNS là gì thay vì đục thẳng CLI để deploy.
+**Pattern**: 
+1. Loại bỏ các form câu hỏi tu từ dài dòng. Không xài tư duy "hướng dẫn lý thuyết".
+2. Chuyển đổi công cụ (Skill/Workflow) thành một dạng script thực thi (Automation Executor).
+3. Sử dụng các kỹ năng command-line (Vercel CLI, Netlify CLI), dò file `.env.production` hay `package.json` và trực tiếp auto-run.
+4. Giao tiếp cực ngắn (Terse/No filler), đưa ra đúng báo cáo Handover có Link URL.
+**Result**: Deploy hoàn tất trong vòng 1 tool call mà không cần user confirm giải thích khái niệm.
+**When to use**: Dành riêng cho User có `technical_level: "intermediate"` hoặc "advanced". Đối xử với User như một đồng nghiệp DevOps trưởng thành.
+
+<!-- PP_APPEND_MARKER — AI append pattern mới TRƯỚC dòng này -->
+> 📅 2026-04-02 — Context: Viết prompt video Text-to-Video trên Veo 3 Google Labs
+
+**Problem**: Nhân vật bị biến dạng, đổi quần áo, mất giọng hoặc sai bối cảnh sau mỗi đợt generate.
+**Pattern**: Bắt buộc chia cấu trúc 3 phần trong một Prompt:
+1. **Phần Character**: Ngoại hình (quần áo, tóc tai phải cố định/chi tiết). Đặc điểm tương tác (direct eye contact).
+2. **Phần Bối Cảnh**: Không gian tả chi tiết lighting (warm, bright), màu sắc, thời điểm. Nếu có transition cũng phải tả.
+3. **Phần Giọng Nói (Voice)**: Yêu cầu VEO3 lồng ghép giọng cụ thể ví dụ `(Southern/Saigon Accent), Clear, mid-range baritone, fast-paced and energetic`. Có kịch bản lời thoại nằm ngay trong Prompt.
+Sử dụng tham số `charID_...`, `settingID_...` để ghim bộ nhớ đệm cho Veo 3 các video sau.
+**Result**: Video sinh ra giữ nguyên nhân vật 100%, giọng đọc xuyên suốt liền mạch, bối cảnh ăn khớp không bị sượng phim.
+**When to use**: Sinh video kịch bản dài / chuỗi video 8 giây nối nhau.
+
+<!-- PP_APPEND_MARKER — AI append pattern mới TRƯỚC dòng này -->
 
 
 ## Pattern: The Empirical Truth Wall (Bức Tường Phủ Quyết Data)

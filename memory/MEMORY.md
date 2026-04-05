@@ -1,0 +1,14 @@
+- [User Profile](user_profile.md) — Hung, freelancer/trader/startup, Python/AI/MQL5, Comarai brand
+- [Coding Preferences](feedback_coding_style.md) — Tieng Viet, terse, KISS, no filler
+- [Zero Trust](feedback_zero_trust.md) — Never store secrets in rules/code/commits
+- [Dev Resources](reference_dev_resources.md) — Free VPS Japan, PostgreSQL, Redis, MinIO
+- [Active Projects](project_active.md) — VEO Tool, Marzy Hackathon, Trading Bots, Comarai
+- [Grapuco CLI](reference_grapuco.md) — AST-based code Knowledge Graph tool
+- [Dream Log](dream_log.md) — Consolidation history, last dream: 2026-04-03
+- [Vercel Deploy Workflow](vercel-deploy-workflow.md) — Vite dist reset xóa .vercel, clear VERCEL_TOKEN, link lại sau build
+- [CSS Hidden Flash Fix](css-hidden-flash-fix.md) — opacity:0 flash on load, fix bằng visibility:hidden
+- [user_tools_env](user_tools_env.md) — Ghi nhớ cấu hình môi trường GH và Vercel CLI đã login sẵn
+- [user_coding_level](user_coding_level.md) — User biết code cơ bản/trung bình, technical_level=intermediate, không dùng newbie mode
+- [Knowledge Architecture (UKA)](reference_knowledge_architecture.md) — Cấu trúc lưu trữ và truy xuất tri thức hệ thống
+- [Danh sách Ports](port_registry.md) — check & quy hoạch port các projects
+- [Facebook Bot Blocking](facebook-bot-blocking.md) — KHÔNG dùng browser_subagent cho Facebook, bị chặn bot

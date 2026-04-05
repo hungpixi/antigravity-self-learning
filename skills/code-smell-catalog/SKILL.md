@@ -1,6 +1,6 @@
 ---
 name: Code Smell Catalog
-description: Patterns xấu trong code cần phát hiện sớm trước khi thành bug. Auto-trigger khi review code, refactor, audit code quality. Triggers on "code smell", "code review", "refactor", "clean code", "code quality", "anti-pattern", "technical debt", "nợ kỹ thuật", "code xấu", "code bẩn".
+description: "Patterns xấu trong code cần phát hiện sớm trước khi thành bug. Auto-trigger khi review code, refactor, audit code quality. Triggers on \"code smell\", \"code review\", \"refactor\", \"clean code\", \"code quality\", \"anti-pattern\", \"technical debt\", \"nợ kỹ thuật\", \"code xấu\", \"code bẩn\"."
 ---
 
 # 🔍 Code Smell Catalog
@@ -103,5 +103,48 @@ grep -rn "IsInSession" --include="*.mq5"  # Phải có ≥2 kết quả (define 
 | 003 | 2026-03-17 | Dead Function | ICT_SystemEA_v2 |
 | 004 | 2026-03-16 | Close Without Reset | IchiDCA_CCBSN |
 | 005 | 2026-03-16 | Partial No Fallback | IchiDCA_CCBSN |
+| 006 | 2026-04-02 | Unmanaged CDP Browser Cache | VEO_TOOL |
+| 007 | 2026-04-02 | Swallowed Exception (`pass`) | VEO_TOOL |
+| 008 | 2026-04-02 | Hardcoded External Locators | VEO_TOOL |
+| 009 | 2026-04-02 | Busy-Wait Loop thiếu Timeout | VEO_TOOL |
+| 010 | 2026-04-02 | God Object Workflow Thread | VEO_TOOL |
+| 011 | 2026-04-02 | JSON IO Blocks Async Loop | VEO_TOOL |
+| 012 | 2026-04-02 | Mix `os.path` và `pathlib` | VEO_TOOL |
+| 013 | 2026-04-02 | Shadowing Variables | VEO_TOOL |
+| 014 | 2026-04-02 | `DEBUG=True` Hardcode | VEO_TOOL |
+| 015 | 2026-04-02 | Manual Regex Extract thay vì JSON DOM | VEO_TOOL |
+
+### SMELL-006: Để Mặc Chromium Tự Quản Lý Cache/Session Trong Tool Auto
+
+> 📅 2026-04-02 — Phát hiện tại: VEO_TOOL
+
+**Signal**: Chạy Automation với profile dài hạn nhưng không cấu trúc cleanup logic (sử dụng Playwright `user_data_dir` nguyên bản). Tắt browser bằng cách Force Kill thẳng thừng.
+**Risk**: Rác Session tăng dần theo thời gian. Force Kill khiến file Preferences và Profile corrupt, gây lỗi mất sạch token và state login web.
+**Refactor**: Luôn áp dụng "Graceful Shutdown" với Timeout Fallback. Xây dựng logic clean thủ công thư mục `Cache` nhưng chừa lại phân vùng `Login Data`.
+
+```python
+# ❌ SMELL: Xóa bạo lực hoặc Mặc hệ thống
+shutil.rmtree(profile_dir) # Xoá sạch → Mất token login
+
+# ✅ CLEAN: Graceful Close → Target Specific Dirs
+try:
+    os.system(f"taskkill /PID {pid} /T") # Ask to close politely
+except: ...
+# Loop check cache folder để dọn rác, CHỪA lại Login Data
+```
+
+### SMELL-007 tới SMELL-015 — VEO_TOOL Code Smells
+> 📅 2026-04-02 — Phát hiện tại: VEO_TOOL
+
+Do kiến trúc phức tạp, tool xuất hiện nhiều đoạn nợ kỹ thuật (Technical Debt) như sau:
+* **SMELL-007 (Swallowed Exception)**: Dùng `except Exception: pass` vô tội vạ khi parse data. Gây hiệu ứng "Silent Fail" — Lỗi xảy ra nhưng app vẫn im lìm trót lọt, rất khó trace ngược. Refactor: Ít nhất phải có `logging.warning()`.
+* **SMELL-008 (Hardcode Locators)**: Selector Playwright cứng mã `textarea[placeholder*='Bạn muốn']`. Nền tảng chỉ cần đổi ngôn ngữ là Bot mù hẵn. Refactor: Dùng XPath liên kết ngữ nghĩa hoặc Extract Constants.
+* **SMELL-009 (Busy Wait)**: Vòng lặp `while True: asyncio.sleep(0.1)` không có `if time.time() > deadline: break`. Nếu state bị kẹt, vòng lặp chạy vĩnh viễn tốn CPU.
+* **SMELL-010 (God Object)**: `TextToVideoWorkflow` chứa tới 30 properties, ôm đồm từ quản lý tiến trình thread, gọi API, thao tác biến môi trường, đến ghi file JSON. Vi phạm Single Responsibility.
+* **SMELL-011 (Blocking IO)**: Trong hàm `async` lại gọi thư viện đồng bộ `json.dump()` và `open()`. Ở network chậm hoặc disk bận, nguyên loop async sẽ nghẽn. Refactor: Dùng `aiofiles`.
+* **SMELL-012 (Path API Mix)**: Trong một file, lúc thì dùng `os.path.join()`, lúc dùng `Path(dir) / file`. Refactor: Chuẩn hoá 100% bằng `.resolve()` của Python `pathlib`.
+* **SMELL-013 (Var Shadowing)**: Đặt tên biến `loop = asyncio.new_event_loop()` ở tầm Threading, sau đó trong logic lại gọi `for loop in range(3)` gây đè scope.
+* **SMELL-014 (Debug Flag)**: `DEBUG = True` được comment out ngay line 40 trong source code thay vì dùng Environment/`dotenv`. Rất dễ rò rỉ log trên máy user nếu build sót.
+* **SMELL-015 (Regex DOM)**: Phân tích kết quả DOM rớt ra từ Google trả về bằng Regex thay vì bóc tách chuẩn cấu trúc AST/JSON. Khả năng gãy cao khi Google tối ưu code minification.
 
 <!-- SMELL_APPEND_MARKER — AI append smell mới TRƯỚC dòng này -->

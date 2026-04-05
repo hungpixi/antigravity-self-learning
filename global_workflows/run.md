@@ -1,5 +1,5 @@
 ---
-description: ▶️ Chạy ứng dụng
+description: "▶️ Chạy ứng dụng"
 ---
 
 # WORKFLOW: /run - The Application Launcher (Smart Start)

@@ -1,6 +1,6 @@
 ---
 name: Bug-Fix Patterns & Debugging Playbook
-description: Tổng hợp 52+ bug patterns từ 15+ dự án thực tế của hungpixi, kèm cách fix hiệu quả. Auto-trigger khi debug, fix bug, review code, hoặc audit. Triggers on "debug", "fix bug", "review code", "audit code", "why is this broken", "code review", "tại sao lỗi", "sửa lỗi", "kiểm tra code", "compile error", "runtime error", "logic error".
+description: "Tổng hợp 52+ bug patterns từ 15+ dự án thực tế của hungpixi, kèm cách fix hiệu quả. Auto-trigger khi debug, fix bug, review code, hoặc audit. Triggers on \"debug\", \"fix bug\", \"review code\", \"audit code\", \"why is this broken\", \"code review\", \"tại sao lỗi\", \"sửa lỗi\", \"kiểm tra code\", \"compile error\", \"runtime error\", \"logic error\"."
 ---
 
 # 🐛 Bug-Fix Patterns & Debugging Playbook
@@ -594,6 +594,7 @@ Khi gặp bug, chạy qua checklist này:
 ## 🧠 TIL Auto-Update Protocol
 
 > **Mô hình TIL (Today I Learned)**: Mỗi khi fix bug hiệu quả xong, AI PHẢI tự động cập nhật skill này.
+> **Tích hợp Memory Protocol**: Pattern nào đủ general → tạo thêm feedback memory trong `~/.gemini/antigravity/memory/`
 
 ### Khi Nào Trigger TIL
 
@@ -634,6 +635,12 @@ Step 5: UPDATE METADATA
   → Cập nhật description trong YAML frontmatter (số pattern mới)
   → Thêm vào Debug Checklist nếu quan trọng
   → Thêm vào Anti-Pattern Rules nếu là rule mới
+
+Step 6: MEMORY SYNC (nếu đủ general)
+  → Nếu pattern áp dụng được ngoài phạm vi bug-fix (vd: architectural preference, workflow)
+  → Tạo/update feedback memory: `memory/feedback_*.md`
+  → Update `memory/MEMORY.md` index
+  → Dùng format: rule → **Why:** → **How to apply:**
 ```
 
 ### Format Mẫu Cho TIL Entry
@@ -740,7 +747,79 @@ Step 5: UPDATE METADATA
 | P68 | 2026-03-28 | Windows `npx` vs `npx.cmd` Process Spawn Fail (MCP) | Antigravity IDE Setup | 🔴 |
 | P69 | 2026-03-29 | MetaEditor Backtest Button Disabled (Out of Data Folder) | MQL5 Trading Bot | 🟡 |
 | P70 | 2026-03-29 | React Hooks Conditional Execution (Early Return) | ERP Project (Next.js) | 🔴 |
+| P71 | 2026-03-30 | Windows batch file CMD popup khi relaunch IDE | MPA Extension Fork | 🟠 |
+| P72 | 2026-03-30 | VSCode extension poll interval quá chậm (2s) | MPA Extension Fork | 🟠 |
+| P73 | 2026-03-30 | Step input required không auto-expand → accept bị block | MPA Extension Fork | 🟠 |
+| P74 | 2026-04-02 | Chạy asyncio blocks Event Loop của PyQt6 GUI → App đứng hình | VEO_TOOL | 🔴 |
+| P75 | 2026-04-02 | `asyncio.wait_for` không catch TimeoutError làm chết worker loop | VEO_TOOL | 🔴 |
+| P76 | 2026-04-02 | Chrome Zombie Processes rò rỉ RAM khi dùng CDP | VEO_TOOL | 🟠 |
+| P77 | 2026-04-02 | Socket Open != CDP Ready (Race condition trên port 9222) | VEO_TOOL | 🟠 |
+| P78 | 2026-04-02 | Lỗi `shutil.rmtree` permission denied do tiến trình Chrome tắt chậm | VEO_TOOL | 🟠 |
+| P79 | 2026-04-02 | 403 Block Rate Limit Loop Vô Tận | VEO_TOOL | 🔴 |
+| P80 | 2026-04-02 | PyQt6 Crash khi update UI widget từ Background Thread | VEO_TOOL | 🔴 |
+| P81 | 2026-04-02 | Playwright Context Invalidation do điều hướng trang trước khi DOM stable | VEO_TOOL | 🟠 |
+| P82 | 2026-04-02 | Mất Token vì xoá toàn bộ Profile thay vì chỉ xoá Cache/Cookies | VEO_TOOL | 🔴 |
+| P83 | 2026-04-02 | Ẩn Cửa Sổ Chrome (`hide_window`) bằng PowerShell thay vì Playwright Headless | VEO_TOOL | 💡 |
+| P84 | 2026-04-04 | Dấu hai chấm (:) không escape trong YAML Frontmatter phá hỏng Parser | System Workflows | 🔴 |
+| P85 | 2026-04-04 | Lệnh Vercel `login` thành công nhưng CLI/MCP vẫn báo lỗi Token Invalid do dính Global Env Vars cũ | Vercel Deployment | 🔴 |
+| P86 | 2026-04-06 | Auto-Clicker Bot Scope Creep Khớp Sai Element (Chat Send Button) | Antigravity Auto Accept | 🔴 |
 <!-- TIL_APPEND_MARKER — AI append dòng mới vào bảng trên, TRƯỚC dòng này -->
+
+---
+
+### P75-P83 — VEO_TOOL Architectural Bug Fixes
+
+**Dự án:** VEO_TOOL (Video Automation)  
+**Ngày:** 2026-04-02  
+
+* Mở rộng thêm 9 mẫu Bug/Fix từ kiến trúc VEO_TOOL:
+* **P75 (TimeoutError Uncaught)**: Khi gọi `await asyncio.wait_for(...)`, nếu thiếu `except asyncio.TimeoutError:`, worker loop sẽ sụp đổ hoàn toàn. Cần bao bọc kĩ toàn bộ Async Calls tương tác với Network.
+* **P76 (Zombie Process)**: Việc kill App PyQt6 không tự động kill Chrome subprocess. Giải pháp: dùng `atexit` hoặc gọi WMI (`Get-CimInstance Win32_Process`) để dò PID Chrome command line `--remote-debugging-port` và taskkill.
+* **P77 (CDP Race Condition)**: Socket check `port 9222` mở chưa là không đủ. Port có thể mở nhưng endpoint `/json/version` của CDP chưa khởi động xong. Fix: Poll HTTP endpoint thay vì chỉ dùng `socket.connect_ex`.
+* **P78 (Permission Denied `shutil.rmtree`)**: Xoá folder Chrome profile gặp lỗi vì file `LOCK` hoặc SQLite DB chưa nhả handle. Fix: Bọc `try-except` từng file, dùng `time.sleep(1)` fallback loop.
+* **P79 (Ban/403 Loop)**: Gặp lỗi 403 Google/Cloudflare (Rate Limit), bot retry điên cuồng 0s delay → IP Ban. Fix: Exponential backoff + clear cookie sau 2 lần failed liên tiếp.
+* **P80 (PyQt Cross-Thread Exception)**: Background worker call `self.ui.label.setText()`. Fix: Bắt buộc dùng `@pyqtSignal` để truyền string lên Main UI Thread.
+* **P81 (Context Invalidation)**: Gọi `locator.click()` khi page đang redirect → exception `target closed`. Fix: `wait_for_selector` trước hành động.
+* **P82 (Nuke Token)**: Xoá thư mục `User Data` để clean rác Automation → đi tong Login Session (`Login Data`). Fix: Phân vùng xoá, chỉ xoá `Cache`, giữ nguyên `Cookies` và `Login Data`.
+* **P83 (Fake Headless bypass Bot Detection)**: Chạy Playwright với flag `headless=new` dễ bị vạch trần. Fix: Chạy `headless=false` nhưng kéo toạ độ cửa sổ ra ngoài màn hình (X: -9999) bằng flag PowerShell/Win32.
+
+---
+
+### P74 — Chạy asyncio blocks Event Loop của PyQt6 GUI → App đứng hình
+
+**Dự án:** VEO_TOOL (Video Automation)  
+**Ngày:** 2026-04-02  
+**Severity:** 🔴 CRITICAL
+
+**Triệu chứng:**
+Khi ấn nút chạy `asyncio.run()` (hoặc `loop.run_until_complete`) từ một callback/signal của PyQt6 UI để kết nối Playwright CDP `browser = await p.chromium.connect_over_cdp(...)`, toàn bộ cửa sổ GUI bị treo (Not Responding) cho tới khi operation chạy xong.
+
+**Root Cause:**
+`asyncio` loop chạy đồng bộ trên thread chính của ứng dụng PyQt6. Thread chính này có nhiệm vụ vẽ UI (Event Loop Qt). Việc chiếm quyền xử lý bằng một loop `async` sẽ khoá hoàn toàn các mouse clicks và repaint của cửa sổ.
+
+**Fix:**
+Chạy mã `asyncio` cô lập trong một sub-thread thông qua `threading.Thread`.
+```python
+# ❌ BUG: Chạy trực tiếp trên UI thread
+def on_btn_click(self):
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(connect_cdp()) # TREO UI
+    
+# ✅ FIX: Bọc vào Threading
+def on_btn_click(self):
+    def _runner():
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            loop.run_until_complete(connect_cdp())
+        finally:
+            loop.close()
+            
+    worker = threading.Thread(target=_runner, daemon=True)
+    worker.start()
+```
+
+**Lesson:** **Tách biệt GUI Loop và Asyncio Loop.** Không bao giờ start event loop của `asyncio` trên Main Thread đang chạy Qt Application. Bạn buộc phải Spawn Threading riêng biệt để giữ giao diện trơn tru.
 
 ---
 
@@ -1728,3 +1807,81 @@ docker exec -u root container_name chown -R node:node /path/
 ```
 
 **Lesson:** Sau MỌI lệnh `docker cp`, PHẢI chạy `docker exec -u root ... chown` để đổi owner. Không bao giờ quên bước này.
+
+---
+
+### P84 — Dấu hai chấm (:) không bọc trong chuỗi YAML Frontmatter Description làm sập Parser
+
+**Dự án:** Antigravity Workflows / Custom Skills  
+**Ngày:** 2026-04-04  
+**Severity:** 🔴 CRITICAL
+
+**Triệu chứng:**
+Toàn bộ danh sách Custom Workflow hay rules (.md files) tự nhiên biến mất hoàn toàn khỏi UI của extension (ví dụ: mất `/deploy`).
+
+**Root Cause:**
+Khi khai báo trường `description` ở Frontmatter có chứa dấu `:` (Ví dụ: `description: The Release Manager (Dual Mode: Public Open Source & Private SaaS)`). Vì không bọc trong dấu ngoặc kép `""`, YAML Parser nghĩ dấu `:` thứ hai là một syntax báo Key-Value mới nằm trên cùng dòng → Syntax error → Extension parser fail âm thầm và loại bỏ luôn file đó khỏi hệ thống.
+
+**Fix:**
+```yaml
+# ❌ BUG — Lỗi hở dấu hai chấm
+---
+description: The Release Manager (Dual Mode: Public Open Source & Private SaaS)
+---
+
+# ✅ FIX — Bọc String bằng ngoặc kép (Double Quotes)
+---
+description: "The Release Manager (Dual Mode: Public Open Source & Private SaaS)"
+---
+```
+
+**Lesson:** **Nguyên tắc sống còn của Frontmatter:** Bất cứ khi nào viết `description` (hoặc title) có chứa các ký tự lạ hoặc dấu câu `:`, `-`, hãy **BỌC TẤT CẢ VÀO TRONG NGOẶC KÉP** `""`. Lỗi này không báo bug log, chỉ làm biến mất UI một cách âm thầm, cực kỳ khó truy vết nếu không chú ý. Đã chạy script auto-escape sửa hàng loạt 32 file toàn hệ thống.
+
+---
+
+### 🔴 P85: Lệnh Vercel `login` báo thành công nhưng CLI/MCP lỗi Token Invalid do dính Global Env Vars cũ
+
+> 📅 TIL 2026-04-04 — Dự án: Vactory Landing Page Deployment
+
+**Pattern**: Thực thi `npx vercel login` qua trình duyệt báo *Authorization successful*, nhưng mọi command (CLI hoặc qua lệnh gọi MCP Server) đều văng lỗi: `Error: The token provided via VERCEL_TOKEN environment variable is not valid.`
+
+``powershell
+# ❌ BUG — Token cũ bị kẹt trong System/User Variables của Windows
+# Lệnh 'login' tạo auth .json trong thư mục AppData, nhưng biến môi trường VERCEL_TOKEN có độ ưu tiên RÀNG BUỘC CAO HƠN.
+# Do token trong Environment Variable đã bị khoá/hết hạn nên Node CLI cứ chạy là crash trước khi kịp đụng vào session.
+# Sai lầm: Lệnh Remove-Item Env:\VERCEL_TOKEN chỉ xoá ở cache của cửa sổ Powershell đó, tắt bật lại vẫn sẽ dính lỗi!
+
+# ✅ FIX — Setup 1 lần dùng mãi mãi (Dập vĩnh viễn qua .NET Powershell)
+# 1. Tạo 1 Token "No Expiration" trên Web.
+# 2. Add vĩnh viễn bằng lệnh Powershell .NET thay vì thao tác tay ở Control Panel:
+[Environment]::SetEnvironmentVariable('VERCEL_TOKEN', 'vcp_Dán_Token_Vào_Đây', 'User')
+
+# 3. Ép cập nhật context hiện tại để dùng ngay lập tức không cần Restart IDE:
+$env:VERCEL_TOKEN='vcp_Dán_Token_Vào_Đây'
+``
+
+**Source**: Vactory Production Deployment. Quá trình pipeline Vercel bị khựng do auth auth-session.
+
+**Rule**: **Khi CLI ưu tiên Token Env Vars, phải đảm bảo ghi đè/xóa biến tận cấp độ hệ điều hành Windows ([Environment]::SetEnvironmentVariable()) chứ không cấu hình tạm thời bằng $env:. Tốt nhất là setup No-Expiration API Token.**
+
+---
+
+### 🔴 P86: Auto-Clicker Bot Scope Creep Khớp Sai Element (Chat Send Button)
+
+> 📅 TIL 2026-04-06 — Dự án: Antigravity Auto Accept Extension
+
+**Pattern**: Bot cào DOM tự động (DOM Observer) bằng `querySelectorAll` bắt trúng nhầm nút "Send Chat" của IDE thay vì chỉ bắt nút "Run", do việc gán selector quá lỏng lẻo (`.action-label`, `.codicon`) nhằm tìm cách "bắt chước UI IDE". 
+
+```javascript
+// ❌ BUG — Selector lưới cào MỌI CHI TIẾT trên UI
+await performClick(['[role="button"]', 'a.action-label', 'a.action-item', '[class*="codicon"]']);
+// Extension vô tình vơ vét cả DOM Tree gốc của màn hình ChatGPT/Windsurf và cướp session click enter.
+
+// ✅ FIX — Return to First Principles: Thu hẹp tối đa Attack Surface
+await performClick(['button', '[class*="button"]', '[class*="anysphere"]']);
+// CHỈ nhắm vào core framework components mang tính nút thật (Real buttons).
+```
+
+**Source**: Antigravity Auto Accept Extension v2.0.x. Hành vi vi phạm nguyên tắc "Giảm thiểu bề mặt tiếp xúc" sinh ra False Positives tràn ngập hệ thống.
+
+**Rule**: **Khi lập trình DOM/UI Observer Agent chạy ngầm liên tục, TUYỆT ĐỐI không dùng các Selectors CSS phổ quát (role=button, icon classes). Phải tuân thủ Principle of Least Privilege: Chỉ quét thẻ HTML mang bản chất nút hoặc Framework-isolated class (Minimal Attack Surface).**

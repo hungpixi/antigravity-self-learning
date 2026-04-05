@@ -1,6 +1,6 @@
 ---
 hostname: buganizer.corp.google.com
-description: Google's internal issue tracker - Create and manage bugs and feature requests
+description: "Google's internal issue tracker - Create and manage bugs and feature requests"
 ---
 
 # Tasks

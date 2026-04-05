@@ -1,11 +1,12 @@
 ---
 name: Operational Runbooks
-description: Quy trình vận hành lặp lại đã chuẩn hóa. Auto-trigger khi deploy, compile, setup project, push GitHub, backtest. Triggers on "deploy", "compile", "push", "setup", "backtest", "quy trình", "cách chạy", "how to run", "how to deploy", "step by step".
+description: "Quy trình vận hành lặp lại đã chuẩn hóa. Auto-trigger khi deploy, compile, setup project, push GitHub, backtest. Triggers on \"deploy\", \"compile\", \"push\", \"setup\", \"backtest\", \"quy trình\", \"cách chạy\", \"how to run\", \"how to deploy\", \"step by step\"."
 ---
 
 # 🏃 Operational Runbooks
 
 > Mỗi quy trình lặp lại >3 bước được log ở đây. AI đọc runbook thay vì hỏi lại user mỗi session.
+> **Memory Sync**: Khi tạo runbook liên quan tool/service mới → tạo `memory/reference_*.md` pointer.
 
 ## Format Runbook Entry
 
@@ -96,6 +97,9 @@ description: Quy trình vận hành lặp lại đã chuẩn hóa. Auto-trigger 
 | 004 | 2026-03-10 | n8n Workflow Setup | Automation |
 | 005 | 2026-03-18 | Startup Report Writing | Competition reports |
 | 010 | 2026-03-22 | OpenClaw Docker Setup | AI Agency |
+| 011 | 2026-03-22 | Supabase Hybrid Sync | Next.js App |
+| 012 | 2026-04-02 | Setup & Chạy VEO_TOOL | AI Video Automation |
+| 013-017 | 2026-04-02 | Workflow Advanced của VEO_TOOL | Bypass + Rotate + Graceful |
 
 ### RB-006: Clone & Setup Chinese Python Projects (uv-based)
 
@@ -304,7 +308,69 @@ GitHub Actions chạy tự động trên server GitHub, đóng giả làm chính
 
 ---
 
+### RB-012: Setup & Chạy VEO_TOOL (Video Automation)
+
+> 📅 2026-04-02 — Áp dụng cho: VEO_TOOL (Auto SORA/Grok/Veo)
+
+**Khi nào dùng**: Setup môi trường và chạy app VEO_TOOL cho account "Ultra Google".
+**Steps**:
+1. Cài đặt Python (ưu tiên >=3.10) và thư viện: `pip install -r requirements.txt` (hoặc uv).
+2. Khi khởi chạy lần đầu tiên, app sẽ tự tải Playwright Chromium: `python main.py`. Cần đợi tải xong mượt mà không thoát ngang (khoảng size ~172MB).
+3. Thêm tài khoản Google vào file cấu hình `list_profile.json` nằm trong mục `data_general`.
+4. Không bao giờ chạy `--headless=new` khi login vào Google vì sẽ dính Block "Browser uncontrolled".
+5. App tự động bypass first run flag và bind vào CDP `9222`.
+
+**Common Errors**:
+- `Process Zombie`: Nếu kill UI PyQt6 mà chưa đóng Chromium, background process vẫn chạy, cần dùng Runbook xử lý kill process PID.
+- UI Treo: Do gọi Async Playwright trên luồng chính thay vì dùng `threading.Thread`.
+
+---
+
+### RB-013 đến RB-017: Workflow Vận Hành Cao Cấp VEO_TOOL
+
+> 📅 2026-04-02 — Áp dụng cho: VEO_TOOL
+
+Tool VEO yêu cầu các thao tác bảo hiểm ở cấp độ Runbook để sống sót qua các thuật toán chống Bot:
+* **RB-013 (Bypass Detection)**: Trước khi Extract Token của Veo/Google, bắt buộc phải simulate một thao tác Cuộn trang (`page.evaluate("window.scrollBy(0, 100)")`) hoặc hover nhẹ button, để Captcha Invisible ghi nhận Event Hành vi người dùng.
+* **RB-014 (Zombie Hunting)**: Khi Force Close Tool, mở PowerShell chạy lệnh lọc rác: `Get-CimInstance Win32_Process -Filter "Name='chrome.exe'" | Where-Object CommandLine -match "remote-debugging-port" | Invoke-CimMethod -MethodName Terminate`.
+* **RB-015 (Profile Rotation Protocol)**: Để chạy Multi-threads, không bao giờ truy cập chung 1 `user_data_dir`. Phân tách thành `profile_1`, `profile_2` trỏ tới các thư mục vật lý khác nhau và Port CDP khác nhau (ví dụ 9222 và 9223).
+* **RB-016 (UI Recovery)**: Nếu cờ `STOP=1` không thể huỷ bỏ vòng lặp Async, bấm "Stop" 3 lần liên tiếp sẽ kích hoạt Force Terminate Worker Thread bằng ngoại lệ Native của PyQt.
+* **RB-017 (Failover 403)**: Khi tài khoản báo quá tải (Limit Reached - Code 403), Runbook tự động: Mở Tab Settings > Clear Website Data > Sleep 120s > Login lại Account dự phòng.
+
+### RB-019: Publish VS Code Extension (Open VSX)
+
+> 📅 2026-04-05 — Áp dụng cho: publish public VS Code extensions
+
+**Khi nào dùng**: Sau khi đóng gói thành `.vsix` và cần phát hành/update lên Open VSX Registry.
+**Steps**:
+1. Đảm bảo file `package.json` có trường `"publisher"` chuẩn xác.
+2. Kiểm tra `OVSX_PAT` đã được load trong User Environment Variable.
+3. Chạy: `npx ovsx publish [folder_hoac_file.vsix] -p $env:OVSX_PAT` (hoặc pass trực tiếp token `-p token...`).
+4. Kiểm tra trang https://open-vsx.org.
+
+**Common Errors**:
+- Lỗi `No metadata parsed`: Đường dẫn `.vsix` không đúng.
+- Thiếu Authentication: Token hết hạn (Cần quay lại Open VSX -> Settings -> Access Tokens để sinh lại).
+
 <!-- RUNBOOK_APPEND_MARKER — AI append runbook mới TRƯỚC dòng này -->
+
+### RB-018: Dọn Secret khỏi Rule/Config Local và chuyển sang User Env
+
+> 📅 2026-04-03 — Áp dụng cho: Gemini / Codex / local AI tooling
+
+**Khi nào dùng**: Khi phát hiện token thô nằm trong `GEMINI.md`, `settings.json`, `mcp_config.json`, `.env.example`, README local.
+**Steps**:
+1. Đọc file nguồn, xác định toàn bộ token đang bị hardcode.
+2. Chuyển mỗi token sang User Environment Variable bằng PowerShell `[Environment]::SetEnvironmentVariable(..., 'User')`.
+3. Rewrite rule/config để chỉ còn tên biến môi trường hoặc wrapper command đọc `$env:...`.
+4. Tạo hoặc cập nhật `context.md` chỉ với tên biến, contact bundle, runtime defaults.
+5. Verify `.gitignore` đã chặn `context.md`, credentials, `.env`, key files.
+6. Restart Gemini/Codex để process mới nhận env mới.
+
+**Common Errors**:
+- Set env xong nhưng tool vẫn báo thiếu token → app đang chạy từ process cũ, phải restart.
+- JSON config để literal `$env:FOO` trong field `env` → nhiều client không expand, nên để process tự inherit env hoặc dùng wrapper shell.
+- Xóa token khỏi rule nhưng quên rotate token cũ đã lộ → vẫn còn rủi ro.
 
 ---
 

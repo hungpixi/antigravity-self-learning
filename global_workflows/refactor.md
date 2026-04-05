@@ -1,5 +1,5 @@
 ---
-description: 🧹 Dọn dẹp & tối ưu code
+description: "🧹 Dọn dẹp & tối ưu code"
 ---
 
 # WORKFLOW: /refactor - The Code Gardener (Safe Cleanup)

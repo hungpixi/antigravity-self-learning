@@ -1,6 +1,6 @@
 ---
 hostname: moma.corp.google.com
-description: Google's internal search engine for documentation and resources
+description: "Google's internal search engine for documentation and resources"
 ---
 
 # Tasks
