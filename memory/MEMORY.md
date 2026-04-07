@@ -12,3 +12,14 @@
 - [Knowledge Architecture (UKA)](reference_knowledge_architecture.md) — Cấu trúc lưu trữ và truy xuất tri thức hệ thống
 - [Danh sách Ports](port_registry.md) — check & quy hoạch port các projects
 - [Facebook Bot Blocking](facebook-bot-blocking.md) — KHÔNG dùng browser_subagent cho Facebook, bị chặn bot
+- [Serverless Youtube Architecture](architecture_serverless_youtube.md) — Fix Youtube IP blocks trên Vercel bằng cách Pivot sang Local File Upload
+- [Vite Prompt Trap Fix](vite_prompt_trap.md) — Khi gọi create-vite qua cmd bị kẹt interactive prompt
+- [Tailwind v4 PostCSS Fix](tailwindcss_v4_postcss.md) — Fix lỗi plugin:vite:css Tailwind v4
+- [Tôn chỉ Content No Toxic](no_toxic_trading_content.md) — Không hater KOL, tập trung Case Study
+- [Trick giả giọng người thật](ai_voice_humanization.md) — Khử giọng AI máy bằng tiếng lóng + EQ Bass
+- [VieNeu TTS SDK Deep Dive](vieneu_deep_dive.md) — Tính năng Voice Cloning ẩn và Factory classes
+- [Tối ưu hóa Whisper AI](whisper_lessons.md) — Không hardcode ngôn ngữ, truyền thẳng MP4, chống sập RAM
+- [Kiến trúc Stickman/Whiteboard AI](stickman_integration.md) — Phối hợp AnimatedDrawings, HandAnim, Storyboard AI sinh frame tự động
+- [Paperclip AI Setup Lessons](paperclip_ai_setup_deploy_lessons.md) — Cách setup, chọn deployment mode, adapter prerequisites, và cách áp dụng Paperclip cho hệ agent
+- [Paperclip Marketing Agency Blueprint](paperclip_marketing_agency_blueprint.md) — Setup công ty marketing 3-agent cho niche trader automation và TikTok trader content
+- [Project: Antigravity IDE Self-Learning Crawler](proj_crawling_ai_agents.md) — Crawl all AI Agent articles to self-learn and self-optimize

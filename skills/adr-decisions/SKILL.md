@@ -83,7 +83,21 @@ description: "Log quyết định tech/architecture để tránh flip-flop. Auto
 | 008 | 2026-03-30 | Pure PowerShell > Batch file cho IDE relaunch | MPA Extension Fork |
 | 011 | 2026-04-04 | Private SaaS (Next.js/Celery) > Open Source CLI | Vactory.vn |
 
+| 012 | 2026-04-06 | Celery+S3+PSQL > FastAPI BackgroundTasks | Tube2Slide Promax |
+
 <!-- ADR_APPEND_MARKER — AI append ADR mới TRƯỚC dòng này -->
+
+### ADR-012: Nâng Cấp Kiến Trúc Tube2Slide Lên Vị Thế Production-grade (SaaS)
+
+> 📅 2026-04-06 — Dự án: Tube2Slide Promax
+
+**Context**: Bản MVP ban đầu sử dụng FastAPI `BackgroundTasks` và lưu trực tiếp Video/PDF xuống ổ cứng server local. Với file video lớn tốn thời gian xử lý rất lâu và sinh ra hàng GB tệp tạm, điều này khiến server nghẽn cổ chai (blocking) và tràn ổ cứng nếu user request đồng loạt.
+**Options**:
+  - A: `Giữ FastAPI BackgroundTasks + Cronjob dọn Local Disk` — Pros: Dễ code, không cần cài thêm DB hay MQ nào. / Cons: Chết luồng khi server restart, không track được tiến trình (tiến độ bị mất), không scale được Worker nào khác.
+  - B: `Chuyển dùng Celery/Redis Queue + MinIO S3 + PostgreSQL` — Pros: Scale vô cực (nhiều worker VPS hỗ trợ giải nén tải), Frontend Poll được `%` chi tiết của job, file tĩnh ném tất cả lên S3 tiết kiệm 100% dung lượng Local Disk, Postgres lưu log lịch sử. / Cons: Hạ tầng phình to nặng nề hơn rất nhiều.
+**Decision**: Chọn **Cách B (Celery + S3 + Postgres)**. Đây là con đường duy nhất để project không sụp đổ khi up lên Production có nhiều user. Frontend Next.js cũng sẽ call Vercel và Fetch Job status từ API backend mượt hơn.
+**Consequences**: ✅ Đảm bảo Zero-downtime và No-local-disk / ✅ UI/UX có thanh tiến trình cho user chờ an tâm / ❌ Phải test gắt gao luồng liên kết nhiều service.
+**Status**: Active
 
 ### ADR-011: Chuyển đổi mô hình KISS Engine Open Source thành Private SaaS (Vactory.vn)
 

@@ -763,7 +763,76 @@ Step 6: MEMORY SYNC (nếu đủ general)
 | P84 | 2026-04-04 | Dấu hai chấm (:) không escape trong YAML Frontmatter phá hỏng Parser | System Workflows | 🔴 |
 | P85 | 2026-04-04 | Lệnh Vercel `login` thành công nhưng CLI/MCP vẫn báo lỗi Token Invalid do dính Global Env Vars cũ | Vercel Deployment | 🔴 |
 | P86 | 2026-04-06 | Auto-Clicker Bot Scope Creep Khớp Sai Element (Chat Send Button) | Antigravity Auto Accept | 🔴 |
+| P87 | 2026-04-06 | Lỗi 500 Vercel Serverless khi fetch Youtube do dải IP Web bị chặn (Bot Check) | YT SlideX | 🔴 |
+| P88 | 2026-04-06 | Lỗi 404 Alias Vercel: project name != vercel.json name tạo alias hỏng | Vercel Deployment | 🟠 |
+| P89 | 2026-04-07 | MQL5 nested ternary `a ? b : c ? d : e` compile error | Phoenix DCA Pro | 🟠 |
+| P90 | 2026-04-07 | MQL5 unary negation trước cast/MathMin: `-(int)X` và `-MathMin()` | Phoenix DCA Pro | 🟠 |
+| P91 | 2026-04-07 | Cloudflare HTTP 403 Block trên Headless Crawl4AI | Kháng Bot Crawler | 🔴 |
 <!-- TIL_APPEND_MARKER — AI append dòng mới vào bảng trên, TRƯỚC dòng này -->
+
+---
+
+### P91 - Cloudflare HTTP 403 Block trên Headless Crawl4AI
+
+**Dự án:** Knowledge Agent Crawler  
+**Ngày:** 2026-04-07  
+**Severity:** 🔴 CRITICAL
+
+**Triệu chứng:**
+Khi sử dụng thư viện `crawl4ai` (ngay cả khi bật `magic=True` hoặc `headless=False`), hệ thống bot protection của Cloudflare hoặc WordPress WAF vẫn detect request là bot automation và trả về lỗi HTTP 403. Website không nhả DOM cho chromium.
+
+**Root Cause:**
+Hệ thống security tiên tiến nhận diện signature của Playwright/Puppeteer ở tầng Network hoặc Browser Fingerprint, từ chối serve HTML content.
+
+**Fix:**
+Sử dụng kiến trúc Fallback: Nếu browser crawl thất bại (403), bắt Exception/Success==False, lập tức dùng `aiohttp.ClientSession` hoặc thư viện HTTP chuẩn (requests/httpx) để get mã nguồn RAW HTML tĩnh với User-Agent người dùng thật. Sau đó passthrough chuỗi RAW HTML này thẳng vào method `crawler.arun(url=f"raw:{html_text}")` của Crawl4AI để tiếp tục tận dụng pipeline bóc tách Markdown BM25 mà không bị WAF chặn IP thêm.
+
+```python
+# ❌ BUG — Crawler fail không có phương án 2
+result = await crawler.arun(url=url, config=run_config, magic=True)
+if not result.success: raise Exception("Blocked by 403")
+
+# ✅ FIX — Thêm aiohttp Fallback
+if not result.success:
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers={'User-Agent': 'Mozilla/5.0...'}) as resp:
+            html = await resp.text()
+            raw_result = await crawler.arun(url=f"raw:{html}", config=run_config)
+            return raw_result.markdown.fit_markdown
+```
+
+---
+
+### P87 — Serverless IP Block: Vercel / Next.js API không thể vượt bot check của Youtube
+
+**Dự án:** YT SlideX (Next.js)  
+**Ngày:** 2026-04-06  
+**Severity:** 🔴 CRITICAL
+
+**Triệu chứng:** Khi chạy `play-dl` hoặc `ytdl-core` hoặc custom API Server nội bộ của Next.js (chạy trên hạ tầng Vercel Serverless/Edge) để fetch luồng MP4 từ URL Youtube, hệ thống luôn báo lỗi 500: `While getting info from youtube: "Sign in to confirm you’re not a bot"`. Trong khi đó, chạy cùng source code đó ở Localhost (IP gia đình) thì thành công.
+
+**Root Cause:**
+Youtube cấm và thắt chặt các hệ thống tự động cào dữ liệu từ các ASN nổi tiếng (ví dụ AWS/Vercel Data Centers). Do các API Route `/api/youtube` chạy bằng HTTP trên Node, Google dễ dàng chặn requests từ IP của Vercel (bắt sign-in/captcha). Dù dùng thư viện nào, miễn là IP bị chặn gốc, toàn bộ kết nối bị treo 500.
+
+**Fix:**
+* **Chiến thuật thay đổi kiến trúc (Pivot):** Tránh Server-Side fetching khi hạ tầng IP bị thắt chặt. Chuyển sang **100% Client-side xử lý File Upload** thay vì yêu cầu User dán link. UI `<input type="file" />` -> Client fetch file tĩnh vào RAM -> ffmpeg.wasm chạy hoàn toàn độc lập tại máy Local người dùng, triệt tiêu sự phụ thuộc CORS và Server Blocks.  
+* **Hoặc (Dùng External APIs):** Giao Fetching cho các hệ sinh thái xử lý tải như API public của `cobalt.tools` hoặc `Invidious`, thay vì bắt Vercel serverless functions tự làm.
+
+---
+
+### P88 - Vercel CLI Deprecated Project `name` tạo Alias 404 ảo
+
+**Dự án:** Vercel Deployment  
+**Ngày:** 2026-04-06  
+**Severity:** 🟠 HIGH
+
+**Triệu chứng:** Deploy bằng lệnh terminal `vercel --prod` xuất ra CLI log `✅ Production: https://yt-slidex-xxx.vercel.app` và `🔗 Aliased: https://yt-slide.vercel.app`. Nhưng khi user click vào link rút gọn `yt-slide.vercel.app` bị dính cửa sổ báo 404 `DEPLOYMENT_NOT_FOUND`.
+
+**Root Cause:**
+Tại config `vercel.json` chứa thuộc tính `name` (deprecated) bị định danh sai lệch với project slug (yt-slidex). Điều này dẫn tới Vercel tự động gán ngẫu hứng 1 Alias Domain nhưng lại không resolve thành công tới Production Release đã push.
+
+**Fix:**
+Dựa vào Production URL chưa alias (`<projectname>-<hash>-<user/org>.vercel.app`) để xác nhận API/Page đã triển khai ổn định chưa. Sau đó loại bỏ trường `name` ra khỏi `vercel.json` và setup lại domain thông qua lệnh `npx vercel domains`. Mọi phán đoán 404 nên check kĩ nguồn gốc domain hay app crash.
 
 ---
 
@@ -1884,4 +1953,81 @@ await performClick(['button', '[class*="button"]', '[class*="anysphere"]']);
 
 **Source**: Antigravity Auto Accept Extension v2.0.x. Hành vi vi phạm nguyên tắc "Giảm thiểu bề mặt tiếp xúc" sinh ra False Positives tràn ngập hệ thống.
 
+---
+
+### 🟠 P89: MQL5 Nested Ternary Operator Compile Error
+
+> 📅 TIL 2026-04-07 — Dự án: Phoenix DCA Pro EA
+
+**Pattern**: MQL5 compiler không hỗ trợ nested ternary `a ? b : c ? d : e`. Lỗi báo "some operator expected" mà không chỉ rõ dòng.
+
+```mql5
+// ❌ BUG — Nested ternary fail compile
+int signal = (score > 0) ? 1 : (score < 0) ? -1 : 0;
+
+// ✅ FIX — Dùng if-else tường minh
+int signal = 0;
+if(score > 0) signal = 1;
+else if(score < 0) signal = -1;
+```
+
+**Rule**: **MQL5 KHÔNG dùng nested ternary. Luôn dùng if-else. Ternary đơn giản `a ? b : c` OK nhưng KHÔNG lồng.**
+
+---
+
+### 🟠 P90: MQL5 Unary Negation Trước Cast/MathMin
+
+> 📅 TIL 2026-04-07 — Dự án: Phoenix DCA Pro EA
+
+**Pattern**: `-(int)MathMin(...)` và `-MathMin(...)` gây "some operator expected" vì MQL5 parser hiểu nhầm `-` là binary operator thiếu operand trái.
+
+```mql5
+// ❌ BUG — Unary minus trước cast
+return -(int)MathMin(100, val);
+return -MathMin(100, score);
+
+// ✅ FIX — Bọc ngoặc rõ ràng
+return -((int)MathMin(100, val));
+return -((int)MathMin(100, score));
+```
+
+**Rule**: **MQL5 return negative value: LUÔN bọc `-(expression)` trong ngoặc kép `-((type)func())`. Không để `-` đứng trước cast hay function call trực tiếp.**
+
+---
+
 **Rule**: **Khi lập trình DOM/UI Observer Agent chạy ngầm liên tục, TUYỆT ĐỐI không dùng các Selectors CSS phổ quát (role=button, icon classes). Phải tuân thủ Principle of Least Privilege: Chỉ quét thẻ HTML mang bản chất nút hoặc Framework-isolated class (Minimal Attack Surface).**
+
+---
+
+### 🔴 P87: Extension Lifecycle Auto-Relaunch Tự Động Quit IDE Khi System Lag
+
+> 📅 TIL 2026-04-07 — Dự án: Antigravity Auto Accept Extension
+
+**Pattern**: Extension chứa cơ chế "Auto-Fix" chạy ngầm (do Scheduler gọi) để check `localhost:9004`. Nếu HTTP request bị timeout 800ms do IDE đang ăn nhiều CPU, extension kết luận là mất mạng CDP và tự động gọi `vscode.commands.executeCommand('workbench.action.quit')` nhằm "khởi động lại để cập nhật Flag". Kết quả: Người dùng bị ngắt ngang "đang làm mà cứ sập", IDE tắt liên tục không báo trước.
+
+```javascript
+// ❌ BUG — Fatal background auto-relaunch
+async function autoFixCDP() {
+    if (relauncher && !relaunchAttemptedThisSession) {
+        log('CDP not found. Attempting automatic relaunch...');
+        relaunchAttemptedThisSession = true;
+        // Fatal: Gọi lệnh kill toàn bộ cửa sổ IDE trong background
+        const result = await relauncher.ensureCDPAndRelaunch(); 
+        return Boolean(result && result.relaunched);
+    }
+}
+
+// ✅ FIX — Prompt user + Tăng Timeout HTTP
+async function autoFixCDP() {
+    if (relauncher && !relaunchAttemptedThisSession) {
+        log('CDP not found. Suppressing automatic IDE quit to prevent crashes.');
+        relaunchAttemptedThisSession = true;
+        // Bật popup cảnh báo thay vì kill ngầm
+        vscode.window.showWarningMessage('Antigravity CDP Port dropped...', 'Restart Now');
+        return false;
+    }
+}
+// Đi kèm với tăng cấu hình Timeout của request JSON: HTTP Timeout `_fetchJson` từ 800ms -> 2000ms.
+```
+
+**Rule**: **TUYỆT ĐỐI KHÔNG gọi `workbench.action.quit` hoặc `window.close()` ngầm từ background task chạy định kỳ. Bất kỳ tiến trình nào có khả năng shutdown/restart app gốc PHẢI được bọc bằng Popup Window (cảnh báo) và đòi hỏi EXPLICT USER CONSENT (Người dùng bấm đồng ý mới chạy).**
