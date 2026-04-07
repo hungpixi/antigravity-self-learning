@@ -11,7 +11,14 @@ type: reference
 
 ## Phần 1: Các mô hình kiến trúc cốt lõi
 
-### 1. Phân Rã Kiến Trúc: Đa Tác Vụ (Multi-Agent) Thay Vì Monolith
+### 1. Kiến Trúc 2-Layer Agent-Native (Mô hình DeepTutor)
+- **Vấn đề:** Khi AI ecosystem phình to, không thể ném 50 tools ngẫu nhiên cho 1 Agent tự chọn, sẽ làm loạn Router và giảm độ chính xác.
+- **Giải pháp:** Tách hoàn toàn hệ thống làm 2 Layers: 
+  - **Level 1 (Tools):** Các hàm tiện ích gọi 1 lần (Web Search, File Execute, RAG).
+  - **Level 2 (Capabilities):** Các luồng Agent độc lập (Research, Problem Solve) có workflow cứng. Khi User gọi, hệ thống dồn toàn bộ quyền Controller (vòng lặp hội thoại) sang cho Capability đó.
+- **Lợi ích:** Plug-n-play cực mượt, mở rộng quy mô dễ không làm phình Orchestrator gốc.
+
+### 2. Phân Rã Kiến Trúc: Đa Tác Vụ (Multi-Agent) Thay Vì Monolith
 - **Vấn đề:** Dùng 1 Prompt khổng lồ cho 1 model duy nhất (monolithic) làm giảm reliability khi task dài.
 - **Giải pháp:** Sử dụng mô hình chuyên môn hóa. Ví dụ framework **G-Stack** chia thành 28 vai trò khác nhau (Security Reviewer, Test Writer, Architect). AI không chỉ làm coder mà làm thành viên nhóm phần mềm.
 - **Lợi ích:** Dễ rollback nếu 1 module lỗi không ảnh hưởng toàn hệ thống (Isolated units). Cross-validation qua nhiều models.
@@ -39,7 +46,14 @@ type: reference
 ### 2. Định Dạng Chuyển Giao: `design.md` Handoff
 - Design tool (như Google Stitch) xuất Layout/UI kit dưới định dạng file text `design.md`. Các AI Coding Agents sẽ đọc file `.md` này thay vì nhìn ảnh mockup, loại bỏ hoàn toàn Human Designer bottleneck.
 
-### 3. Kiến Trúc Always-On: Background Agents & Repo Daemons
+### 3. Cơ chế Dynamic Heartbeat (2-Phase Decision)
+- **Vấn đề:** Các Auto-bot nếu dùng cronjob tĩnh thì khô khan, spam. Nhưng bắt LLM scan database liên tục thì burn token dữ dội.
+- **Giải pháp (Pattern từ DeepTutor):**
+  - **Phase 1 (Wake & Decide):** Cron đánh thức Agent, bắt nó đọc lướt qua file `HEARTBEAT.md`. Agent phải gọi 1 Virtual Tool trả về JSON `{action: 'skip' | 'run', tasks: '...'}`.
+  - **Phase 2 (Execute):** Nếu `skip`, tắt bot ngay lập tức, tiết kiệm token. Nếu `run`, mới chạy Agent loop xịn, sau đó qua bước Evaluator xem Log có đáng để đánh thức (Push Noti) gọi User không.
+- **Lợi ích:** Tạo ra Auto-bot cực thông minh, tự ngủ, tự thức dậy báo cáo khi có sự cố, y chang con người không hề spam.
+
+### 4. Kiến Trúc Always-On: Background Agents & Repo Daemons
 - Xu hướng dịch chuyển AI từ "Assistant" thành "Partner": Chạy agent ngầm dạng Daemon để tự cron-job review code ban đêm, chạy test và refactor liên tục.
 
 ## Phần 4: Security & An toàn thực thi (Harness Engineering)
