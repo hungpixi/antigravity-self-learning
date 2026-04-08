@@ -1,3 +1,7 @@
+---
+title: "MEMORY"
+---
+
 - [User Profile](user_profile.md) — Hung, freelancer/trader/startup, Python/AI/MQL5, Comarai brand
 - [Coding Preferences](feedback_coding_style.md) — Tieng Viet, terse, KISS, no filler
 - [Zero Trust](feedback_zero_trust.md) — Never store secrets in rules/code/commits

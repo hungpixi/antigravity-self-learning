@@ -1,3 +1,7 @@
+---
+title: "progress"
+---
+
 # Progress Log
 <!-- 
   WHAT: Your session log - a chronological record of what you did, when, and what happened.

@@ -1,3 +1,7 @@
+---
+title: "reference knowledge architecture"
+---
+
 # Unfied Knowledge Architecture (UKA) v1.0
 > **Triết lý:** AI học được gì mới thì phải cất đúng ngăn tủ. Không vứt rác lung tung, không tạo file tuỳ tiện. Kỷ luật rườm rà sinh ra lỗi YAML.
 

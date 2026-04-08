@@ -1,3 +1,7 @@
+---
+title: "reference"
+---
+
 # Reference: Manus Context Engineering Principles
 
 This skill is based on context engineering principles from Manus, the AI agent company acquired by Meta for $2 billion in December 2025.

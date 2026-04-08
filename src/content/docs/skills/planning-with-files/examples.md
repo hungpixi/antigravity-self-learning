@@ -1,3 +1,7 @@
+---
+title: "examples"
+---
+
 # Examples: Planning with Files in Action
 
 ## Example 1: Research Task

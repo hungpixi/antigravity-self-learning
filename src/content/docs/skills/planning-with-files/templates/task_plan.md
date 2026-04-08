@@ -1,3 +1,7 @@
+---
+title: "task plan"
+---
+
 # Task Plan: [Brief Description]
 <!-- 
   WHAT: This is your roadmap for the entire task. Think of it as your "working memory on disk."
