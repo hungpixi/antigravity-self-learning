@@ -1,0 +1,36 @@
+- [User Profile](user_profile.md) — Hung, freelancer/trader/startup, Python/AI/MQL5, Comarai brand
+- [Coding Preferences](feedback_coding_style.md) — Tieng Viet, terse, KISS, no filler
+- [Zero Trust](feedback_zero_trust.md) — Never store secrets in rules/code/commits
+- [Dev Resources](reference_dev_resources.md) — Free VPS Japan, PostgreSQL, Redis, MinIO
+- [Active Projects](project_active.md) — VEO Tool, Marzy Hackathon, Trading Bots, Comarai
+- [Grapuco CLI](reference_grapuco.md) — AST-based code Knowledge Graph tool
+- [Dream Log](dream_log.md) — Consolidation history, last dream: 2026-04-03
+- [Vercel Deploy Workflow](vercel-deploy-workflow.md) — Vite dist reset xóa .vercel, clear VERCEL_TOKEN, link lại sau build
+- [CSS Hidden Flash Fix](css-hidden-flash-fix.md) — opacity:0 flash on load, fix bằng visibility:hidden
+- [user_tools_env](user_tools_env.md) — Ghi nhớ cấu hình môi trường GH và Vercel CLI đã login sẵn
+- [user_coding_level](user_coding_level.md) — User biết code cơ bản/trung bình, technical_level=intermediate, không dùng newbie mode
+- [Knowledge Architecture (UKA)](reference_knowledge_architecture.md) — Cấu trúc lưu trữ và truy xuất tri thức hệ thống
+- [Danh sách Ports](port_registry.md) — check & quy hoạch port các projects
+- [Facebook Bot Blocking](facebook-bot-blocking.md) — KHÔNG dùng browser_subagent cho Facebook, bị chặn bot
+- [Serverless Youtube Architecture](architecture_serverless_youtube.md) — Fix Youtube IP blocks trên Vercel bằng cách Pivot sang Local File Upload
+- [Vite Prompt Trap Fix](vite_prompt_trap.md) — Khi gọi create-vite qua cmd bị kẹt interactive prompt
+- [Tailwind v4 PostCSS Fix](tailwindcss_v4_postcss.md) — Fix lỗi plugin:vite:css Tailwind v4
+- [Tôn chỉ Content No Toxic](no_toxic_trading_content.md) — Không hater KOL, tập trung Case Study
+- [Vite Prompt Trap Fix](vite_prompt_trap.md) — Khi gọi create-vite qua cmd bị kẹt interactive prompt
+- [Tailwind v4 PostCSS Fix](tailwindcss_v4_postcss.md) — Fix lỗi plugin:vite:css Tailwind v4
+- [Tôn chỉ Content No Toxic](no_toxic_trading_content.md) — Không hater KOL, tập trung Case Study
+- [Trick giả giọng người thật](ai_voice_humanization.md) — Khử giọng AI máy bằng tiếng lóng + EQ Bass
+- [VieNeu TTS SDK Deep Dive](vieneu_deep_dive.md) — Tính năng Voice Cloning ẩn và Factory classes
+- [Tối ưu hóa Whisper AI](whisper_lessons.md) — Không hardcode ngôn ngữ, truyền thẳng MP4, chống sập RAM
+- [Kiến trúc Stickman/Whiteboard AI](stickman_integration.md) — Phối hợp AnimatedDrawings, HandAnim, Storyboard AI sinh frame tự động
+- [Paperclip AI Setup Lessons](paperclip_ai_setup_deploy_lessons.md) — Cách setup, chọn deployment mode, adapter prerequisites, và cách áp dụng Paperclip cho hệ agent
+- [Paperclip Marketing Agency Blueprint](paperclip_marketing_agency_blueprint.md) — Setup công ty marketing 3-agent cho niche trader automation và TikTok trader content
+- [Project: Antigravity IDE Self-Learning Crawler](proj_crawling_ai_agents.md) — Crawl all AI Agent articles to self-learn and self-optimize
+- [Vinahost FTP Credentials](vinahost_ftp_credentials.md) — Thông tin FTP phamphunguyenhung.com
+- [Affiliate Skills (Affitor)](ref_affiliate_skills.md) — Bộ 32 AI skills cho Affiliate Marketing, Social Intelligence
+- [Hidrix Tools (Sonpiaz)](ref_hidrix_tools.md) — Tool search web, lục X, Reddit bằng terminal
+- [DeepTutor (HKUDS)](ref_deeptutor.md) — Framework AI Tutor chuyên sâu, học adaptive và RAG
+- [Triết lý Nghề đào giếng (LLM là Team)](ai_team_philosophy.md) — Tư duy nền tảng vận hành AI theo hướng đối kháng, RAG cấu trúc luận
+- [Google Docs Terminal CLI](adr_gdocs_terminal_cli.md) — Thay MCP bằng Service Account + NodeJS CLI để thao tác Docs siêu rẻ context token
+- [Workflow Protocol Standards](workflow_optimization_rules.md) — Ép khuôn kiến trúc AI workflow dưới 6k chars (5-Why/What/How) & Context Isolation
+- [Kiến trúc Mempalace & AAAK Dialect](adr_mempalace_arch.md) — Tư duy vận hành Hybrid Memory (Temporal Knowledge Graph + Vector DB) cho AI Agent
