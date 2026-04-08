@@ -1,0 +1,13 @@
+[31m[InvalidContentEntryDataError][39m [1mdocs → memory/user_tools_env[22m data does not match collection schema.
+
+  [1mtitle**: **title[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mLocation:[22m
+    [4mD:\code\antigravity-self-learning\src\content\docs\memory\user_tools_env.md:0:0[24m
+  [1mStack trace:[22m
+[2m    at getEntryData (D:\code\antigravity-self-learning\node_modules\astro\dist\content\utils.js:122:16)
+    at async eval (D:\code\antigravity-self-learning\node_modules\astro\dist\content\loaders\glob.js:211:13)[22m

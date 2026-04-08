@@ -1,0 +1,68 @@
+
+> antigravity-self-learning@0.0.1 build
+> astro build
+
+[2m10:30:15[22m [34m[content][39m Syncing content
+node.exe : [31m[Invali
+dContentEntryDataError]
+[39m [1mdocs ? memory
+/adr_gdocs_terminal_cli
+[22m data does not 
+match collection 
+schema.
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: ([31m[Invalid   
+ Co...lection schem    
+a.:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+
+  [1mtitle**: 
+**title[22m: Required
+
+  [1mHint:[22m
+[33m    See [4mhttps:
+//docs.astro.build/en/g
+uides/content-collectio
+ns/[24m for more 
+information on content 
+schemas.[39m
+  [1mError 
+reference:[22m
+    [36m[4mhttps://do
+cs.astro.build/en/refer
+ence/errors/invalid-con
+tent-entry-data-error/
+[24m[39m
+  [1mLocation:[22m
+    [4mD:\code\antigra
+vity-self-learning\src\
+content\docs\memory\adr
+_gdocs_terminal_cli.md:
+0:0[24m
+  [1mStack trace:[22m
+[2m    at 
+getEntryData (D:\code\a
+ntigravity-self-learnin
+g\node_modules\astro\di
+st\content\utils.js:122
+:16)
+    at async eval (D:\c
+ode\antigravity-self-le
+arning\node_modules\ast
+ro\dist\content\loaders
+\glob.js:211:13)[22m

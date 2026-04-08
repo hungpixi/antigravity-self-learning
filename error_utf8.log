@@ -1,0 +1,48 @@
+﻿node : file:///D:/code/
+antigravity-self-learni
+ng/benchmarks/latency_m
+itata.mjs:3
+At line:1 char:1
++ node benchmarks/laten
+cy_mitata.mjs 2> 
+error.log
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (file:///D:/co   
+ de...cy_mitata.mjs    
+:3:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+import { run, bench, 
+group, baseline } from 
+'mitata';
+                       
+     ^^^^^^^^
+SyntaxError: The 
+requested module 
+'mitata' does not 
+provide an export 
+named 'baseline'
+    at #_instantiate (n
+ode:internal/modules/es
+m/module_job:254:21)
+    at async 
+ModuleJob.run (node:int
+ernal/modules/esm/modul
+e_job:369:5)
+    at async onImport.t
+racePromise.__proto__ (
+node:internal/modules/e
+sm/loader:671:26)
+    at async asyncRunEn
+tryPointWithESMLoader (
+node:internal/modules/r
+un_main:101:5)
+
+Node.js v24.11.1

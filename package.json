@@ -1,0 +1,35 @@
+{
+  "name": "antigravity-self-learning",
+  "description": "Zero-Context-Switching, Markdown-Native Memory Architecture for Built-In AI Agents. The lightweight alternative to Mempalace & MCP.",
+  "keywords": [
+    "ai-agent",
+    "mcp-server",
+    "mempalace",
+    "knowledge-graph",
+    "astro-starlight",
+    "comarai",
+    "memory-system",
+    "llm-memory",
+    "rag"
+  ],
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "sync": "node scripts/sync-brain.mjs",
+    "dream": "node scripts/dream.mjs",
+    "benchmark": "node benchmarks/ragas_native_eval.mjs && node benchmarks/swe_bench_eval.mjs && node benchmarks/latency_mitata.mjs"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.38.3",
+    "@google/genai": "^1.48.0",
+    "astro": "^6.0.1",
+    "better-sqlite3": "^12.8.0",
+    "mitata": "^1.0.34",
+    "sharp": "^0.34.2"
+  }
+}
