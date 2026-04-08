@@ -1,4 +1,5 @@
 ---
+title: "paperclip ai setup deploy lessons"
 name: Paperclip AI Setup And Deploy Lessons
 description: "Tóm tắt cách setup, mode triển khai, adapter prerequisites, và bài học áp dụng Paperclip AI làm control plane cho hệ agent."
 type: reference

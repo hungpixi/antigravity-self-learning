@@ -1,4 +1,5 @@
 ---
+title: "ref deeptutor"
 name: DeepTutor (HKUDS)
 description: Quyển sổ tay kiến trúc framework AI Tutor tập trung vào RAG chuyên sâu và tương tác sư phạm.
 type: reference

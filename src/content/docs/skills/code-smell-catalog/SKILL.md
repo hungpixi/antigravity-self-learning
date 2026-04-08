@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Code Smell Catalog
 description: "Patterns xấu trong code cần phát hiện sớm trước khi thành bug. Auto-trigger khi review code, refactor, audit code quality. Triggers on \"code smell\", \"code review\", \"refactor\", \"clean code\", \"code quality\", \"anti-pattern\", \"technical debt\", \"nợ kỹ thuật\", \"code xấu\", \"code bẩn\"."
 ---

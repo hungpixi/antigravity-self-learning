@@ -1,4 +1,5 @@
 ---
+title: "architecture serverless youtube"
 name: Serverless YouTube Bypass Architecture
 description: Chiến lược xử lý khi bị YouTube chặn IP (Bot detection) tại Vercel/Cloudflare
 type: project

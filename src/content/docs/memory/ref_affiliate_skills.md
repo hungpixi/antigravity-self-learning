@@ -1,4 +1,5 @@
 ---
+title: "ref affiliate skills"
 name: Affiliate Skills (Affitor)
 description: Bộ 32 AI skills cho Affiliate Marketing, Social Intelligence (v1.2).
 type: reference

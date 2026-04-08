@@ -1,4 +1,5 @@
 ---
+title: "vercel-deploy-workflow"
 name: Vercel Deploy Workflow
 description: "Quy trình deploy static Vite site lên Vercel từ CLI — bao gồm gotchas về VERCEL_TOKEN, project linking, và dist folder reset."
 type: feedback

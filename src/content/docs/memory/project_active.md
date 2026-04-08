@@ -1,4 +1,5 @@
 ---
+title: "project active"
 name: Active Projects Q2 2026
 description: "Current projects Hung is working on — VEO Tool, Marzy, Trading Bots"
 type: project

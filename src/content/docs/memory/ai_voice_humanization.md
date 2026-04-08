@@ -1,4 +1,5 @@
 ---
+title: "ai voice humanization"
 name: Khử Tính Máy Móc của Giọng AI (Humanize TTS)
 description: Kinh nghiệm đánh lừa cảm giác người nghe, biến giọng AI thành giọng KOL người thật.
 type: feedback

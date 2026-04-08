@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Operational Runbooks
 description: "Quy trình vận hành lặp lại đã chuẩn hóa. Auto-trigger khi deploy, compile, setup project, push GitHub, backtest. Triggers on \"deploy\", \"compile\", \"push\", \"setup\", \"backtest\", \"quy trình\", \"cách chạy\", \"how to run\", \"how to deploy\", \"step by step\"."
 ---

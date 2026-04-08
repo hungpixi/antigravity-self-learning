@@ -1,4 +1,5 @@
 ---
+title: "user profile"
 name: User Profile
 description: "Pham Phu Nguyen Hung — freelancer, trader, startup builder, Comarai brand owner"
 type: user

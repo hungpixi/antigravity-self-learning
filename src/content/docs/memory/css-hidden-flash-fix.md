@@ -1,4 +1,5 @@
 ---
+title: "css-hidden-flash-fix"
 name: CSS Hidden Element Flash Fix
 description: "Fix element flash khi page load do .hidden chỉ dùng opacity 0 với transition — cần thêm visibility hidden."
 type: feedback

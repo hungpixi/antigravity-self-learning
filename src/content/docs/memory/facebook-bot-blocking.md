@@ -1,4 +1,5 @@
 ---
+title: "facebook-bot-blocking"
 name: Facebook Bot Blocking
 description: Facebook chặn browser subagent/bot - không dùng browser_subagent để crawl Facebook pages
 type: feedback

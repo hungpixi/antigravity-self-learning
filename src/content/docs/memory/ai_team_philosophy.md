@@ -1,4 +1,5 @@
 ---
+title: "ai team philosophy"
 name: Tôn chỉ làm việc với AI (Nghề Đào Giếng tri thức)
 description: Triết lý xương sống của Antigravity về cách ứng xử với AI, xem AI là Team (thư ký toàn năng) thay vì Tool tĩnh.
 type: feedback

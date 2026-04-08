@@ -1,4 +1,5 @@
 ---
+title: "feedback zero trust"
 name: Zero Trust Secret Hygiene
 description: "Absolute rule — no secrets in source code, rules, commits, or PR"
 type: feedback

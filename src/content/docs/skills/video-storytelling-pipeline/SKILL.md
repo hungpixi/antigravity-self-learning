@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: video-storytelling-pipeline
 description: Pipeline tự động chuyển ảnh minh họa + kịch bản thành video storytelling có lồng tiếng AI (VieNeu-TTS + FFmpeg Ken Burns). Triggers on "tạo video", "storytelling", "video từ ảnh", "lồng tiếng", "VieNeu", "Ken Burns", "animation từ ảnh".
 ---

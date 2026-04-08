@@ -1,4 +1,5 @@
 ---
+title: "adr gdocs terminal cli"
 name: Google Docs Terminal-First CLI (No MCP)
 description: Dùng Service Account và NodeJS CLI nội bộ thay cho MCP để ghi/đọc Google Docs tiết kiệm context
 type: feedback

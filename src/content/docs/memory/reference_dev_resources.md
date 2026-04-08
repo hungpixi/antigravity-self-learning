@@ -1,4 +1,5 @@
 ---
+title: "reference dev resources"
 name: Free Dev Resources
 description: "Shared dev resources from hoctuthien.com — VPS Japan, PostgreSQL, Redis, MinIO"
 type: reference

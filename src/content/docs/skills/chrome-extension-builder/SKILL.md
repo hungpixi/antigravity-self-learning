@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Chrome Extension Pro-Builder (Manifest V3)
 description: "Kỹ năng chuẩn chỉnh để thiết lập, thiết kế và phát triển Chrome Extension cho các mục đích tự động hóa mạng và workflow AI (Vượt qua Playwright/Puppeteer bot detection)."
 ---

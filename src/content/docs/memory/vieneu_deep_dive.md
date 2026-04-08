@@ -1,4 +1,5 @@
 ---
+title: "vieneu deep dive"
 name: Hướng dẫn Sử dụng Thư viện VieNeu-TTS Local (Voice Cloning)
 description: Cấu trúc code nội bộ, các Parameters cốt lõi và Tính năng Zero-Shot Voice Cloning ẩn.
 type: reference

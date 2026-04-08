@@ -1,4 +1,5 @@
 ---
+title: "adr mempalace arch"
 name: Mempalace Architecture & AAAK Memory Dialect
 description: Giao thức bộ nhớ dài hạn đa chiều (Vector + Temporal Knowledge Graph + SQLite) cho AI Agents và hệ ngôn ngữ nén AAAK.
 type: reference

@@ -1,4 +1,5 @@
 ---
+title: "dream log"
 name: Dream Consolidation Log
 description: "Log cac lan dream consolidation de track stale check va frequency"
 type: reference

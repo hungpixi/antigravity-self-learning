@@ -1,4 +1,5 @@
 ---
+title: "no toxic trading content"
 name: Tôn chỉ Content Trading (No Toxic)
 description: Nguyên tắc xây dựng nội dung sạch, không công kích KOL khác để câu view.
 type: user

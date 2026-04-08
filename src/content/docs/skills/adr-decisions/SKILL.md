@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Architecture Decision Records (ADR)
 description: "Log quyết định tech/architecture để tránh flip-flop. Auto-trigger khi chọn framework, library, database, design pattern. Triggers on \"chọn framework\", \"dùng gì\", \"so sánh\", \"alternative\", \"tech stack\", \"nên dùng\", \"which library\", \"compare\", \"vs\", \"or\"."
 ---

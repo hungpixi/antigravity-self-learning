@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Effective Prompt Patterns
 description: "Meta-optimization - những prompt patterns cho AI output tốt hơn. Auto-trigger khi prompt engineering, cải thiện output, meta-optimization. Triggers on \"prompt\", \"better output\", \"improve AI\", \"cách hỏi AI\", \"prompt engineering\", \"kết quả tốt hơn\", \"AI trả lời sai\", \"how to prompt\"."
 ---

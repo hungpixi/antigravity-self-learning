@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Performance Optimization Playbook
 description: "Patterns tối ưu hiệu suất đã chứng minh bằng metrics. Auto-trigger khi optimize, slow, latency, memory, performance. Triggers on \"chậm\", \"slow\", \"optimize\", \"performance\", \"latency\", \"memory\", \"cache\", \"tối ưu\", \"nhanh hơn\", \"giảm thời gian\"."
 ---

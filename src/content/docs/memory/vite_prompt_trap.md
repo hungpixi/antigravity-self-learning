@@ -1,4 +1,5 @@
 ---
+title: "vite prompt trap"
 name: Vite Prompt Trap Fix
 description: Cách fix lỗi treo shell khi chạy create-vite do bị hỏi interactive prompt
 type: feedback

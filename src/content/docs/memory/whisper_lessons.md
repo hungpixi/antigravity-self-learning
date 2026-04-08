@@ -1,4 +1,5 @@
 ---
+title: "whisper lessons"
 name: Cẩm nang Tích hợp Whisper AI (Best Practices)
 description: Bài học xương máu khi dùng Python gọi Whisper để trích xuất Subtitle, tránh lỗi sập nguồn và Hardcode.
 type: reference

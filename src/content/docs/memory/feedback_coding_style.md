@@ -1,4 +1,5 @@
 ---
+title: "feedback coding style"
 name: Coding Style Preferences
 description: "How Hung wants AI to code and communicate — terse, Vietnamese, no summaries"
 type: feedback

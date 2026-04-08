@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Nghề Đào Giếng (Knowledge Extractor Playbook)
 description: Framework tự học và bóc tách domain/repo code mới theo triết lý "AI là Team" & "Cấu trúc hóa". Áp dụng nguyên lý LLM nội suy để phá vỡ barrier to entry.
 ---

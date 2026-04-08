@@ -1,4 +1,5 @@
 ---
+title: "tailwindcss v4 postcss"
 name: Tailwind CSS v4 PostCSS Error
 description: Fix lỗi Vite/PostCSS khi dùng tailwindcss bản mới nhất (v4)
 type: feedback

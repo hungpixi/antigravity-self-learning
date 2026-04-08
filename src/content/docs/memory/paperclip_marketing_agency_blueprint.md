@@ -1,4 +1,5 @@
 ---
+title: "paperclip marketing agency blueprint"
 name: Paperclip Marketing Agency Blueprint
 description: "Blueprint dùng Paperclip để vận hành agency digital marketing 3-agent đầu tiên cho niche trader automation và TikTok trader content."
 type: project

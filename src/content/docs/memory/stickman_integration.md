@@ -1,4 +1,5 @@
 ---
+title: "stickman integration"
 name: Kiến Trúc Tự Động Hóa Stickman & Whiteboard Animation
 description: Workflow phối hợp 3 nền tảng Open Source (AnimatedDrawings, HandAnim, Storyboard AI) để Gen video người que.
 type: reference

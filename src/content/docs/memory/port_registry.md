@@ -1,4 +1,5 @@
 ---
+title: "port registry"
 name: port_registry
 description: Central registry of ports used across development projects to avoid conflicts.
 type: reference

@@ -1,4 +1,5 @@
 ---
+title: "proj crawling ai agents"
 name: Project Knowledge Architecture Auto Crawler
 description: Crawling AI Agent patterns to self-learn and improve Antigravity IDE
 type: project

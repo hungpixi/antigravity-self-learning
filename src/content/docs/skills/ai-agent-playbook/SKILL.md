@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: AI Agent Architecture Reference & Playbook
 description: "Tổng hợp kiến thức thiết kế hệ thống AI Agent từ ProductiveTechTalk. Auto-trigger khi thiết kế agent system, AI workflow, bot automation. Triggers on 'thiết kế agent', 'xây dựng AI', 'agent architecture', 'bot workflow', 'AI team', 'tự động hoàn toàn', 'agent playbook', 'agentic ai'."
 type: reference

@@ -1,4 +1,5 @@
 ---
+title: "ref hidrix tools"
 name: Hidrix Tools (Sonpiaz)
 description: Tool search web, lục lọi dữ liệu X (Twitter), Reddit ngay trong môi trường làm việc thông qua terminal.
 type: reference

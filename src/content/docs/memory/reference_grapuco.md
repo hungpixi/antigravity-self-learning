@@ -1,4 +1,5 @@
 ---
+title: "reference grapuco"
 name: Grapuco CLI
 description: "AST-based Knowledge Graph tool for AI code understanding — installed v0.1.8"
 type: reference

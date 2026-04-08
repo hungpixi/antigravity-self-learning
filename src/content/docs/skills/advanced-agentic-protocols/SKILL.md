@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: "Advanced Agentic Protocols (The OpenCode Way)"
 description: "Framework tư duy hệ thống và nguyên tắc điều phối cấp cao bóc tách từ Claude Code, giúp tối ưu hóa tiến trình làm việc của Antigravity."
 ---

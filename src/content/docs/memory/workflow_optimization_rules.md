@@ -1,4 +1,5 @@
 ---
+title: "workflow optimization rules"
 name: Antigravity Workflow & Protocol Standards (Claude Code inspired)
 description: Chuẩn hóa bộ workflow/prompts theo cấu trúc cực ngắn (5-Why/What/How) và protocol Context Isolation.
 type: feedback

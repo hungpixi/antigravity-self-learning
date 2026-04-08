@@ -1,4 +1,5 @@
 ---
+title: "SKILL"
 name: Bug-Fix Patterns & Debugging Playbook
 description: "Tổng hợp 52+ bug patterns từ 15+ dự án thực tế của hungpixi, kèm cách fix hiệu quả. Auto-trigger khi debug, fix bug, review code, hoặc audit. Triggers on \"debug\", \"fix bug\", \"review code\", \"audit code\", \"why is this broken\", \"code review\", \"tại sao lỗi\", \"sửa lỗi\", \"kiểm tra code\", \"compile error\", \"runtime error\", \"logic error\"."
 ---
