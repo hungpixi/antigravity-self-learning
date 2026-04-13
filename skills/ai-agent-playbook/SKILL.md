@@ -70,9 +70,10 @@ type: reference
 - Enterprise Agent không kết nối lỏng lẻo với Data + LLM, mà hoạt động trên Ontology (Mô hình khái niệm hóa doanh nghiệp). Agent tự động thừa kế mọi Rule Governance của con người, không thể xem data vượt quyền.
 - **Shared Sandbox:** Cho phép Manager là người thật nhảy vào cùng mô phỏng Sandbox giả lập với AI trước khi commit thay đổi vào DB.
 
-### 4. Codebase Context Graph (Tích hợp Grapuco)
-- **Kiểm soát Dependency bằng Knowledge Graph:** Cải thiện hệ thống Harness bằng việc sử dụng Grapuco. Thay vì để AI tự dò dẫm file cấu trúc, Harness bắt buộc AI phải truy vấn đồ thị tri thức (Knowledge Graph) của Grapuco (qua MCP Server với các tool `get_dependencies`, `semantic_search`) để nắm rõ kiến trúc tổng thể và luồng dữ liệu (data flow) một cách chính xác.
-- **Security Dependency Lock (Kiểm duyệt Kiến trúc):** Grapuco đóng vai trò như một lớp "Security Hook" thứ hai, khóa các thay đổi có nguy cơ phá vỡ dependency cốt lõi. Bất kỳ refactor nào từ Generator đều phải vượt qua phân tích đồ thị trước khi sang Evaluator, giảm thiểu rủi ro regression tối đa.
+### 4. Codebase Context Graph (Tích hợp Grapuco Local)
+- **Kiểm soát Dependency bằng Knowledge Graph:** Cải thiện hệ thống Harness bằng việc sử dụng Grapuco. Thay vì để AI tự dò dẫm file cấu trúc (rất tốn token và dễ bị Lost-in-context), Harness bắt buộc AI phải dùng **Local Grapuco CLI (AST-based)** để phân tích cấu trúc (outline) và trích xuất hàm (extract) chính xác 100%.
+- **Security Dependency Lock (Kiểm duyệt Kiến trúc):** Grapuco đóng vai trò như một lớp "Security Hook" thứ hai, khóa các thay đổi có nguy cơ phá vỡ dependency cốt lõi. Bất kỳ refactor nào cũng phải chạy lệnh dò dependency (`deps`) trước khi sang bước sửa code, giảm thiểu rủi ro regression tối đa.
+- **Tối ưu Hiệu suất bằng AST Caching (Performance Tuning):** Kỹ thuật đột phá cho phép tăng tốc độ truy vấn Grapuco lên gấp 50 lần. Hệ thống băm đường dẫn file thành hash MD5 và so sánh Modification Time (`mtime`). Kết quả JSON (`outline`, `deps`) được lưu vào `.cache/` để AI có thể đọc ngay lập tức mà không phải chờ nạp và phân tích AST lại từ đầu, biến luồng chạy Agentic thành tốc độ phản hồi tức thì (Real-time).
 
 ## Phần 5: The Virtual Company Framework & Định Hướng Mới
 
