@@ -14,7 +14,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 
-from antigravity_learn import __version__
+from antigravity_learn import __version__, KnowledgeGraph, CodebaseParser
 
 app = typer.Typer(
     name="antigravity-learn",
@@ -26,35 +26,158 @@ console = Console()
 # Default Antigravity skills directory
 DEFAULT_SKILLS_DIR = Path.home() / ".gemini" / "antigravity" / "skills"
 
+# Local knowledge graph database
+LOCAL_DB_DIR = Path(".antigravity")
+LOCAL_DB_PATH = LOCAL_DB_DIR / "graph.db"
+
 # Skills bundled with this package
 PACKAGE_DIR = Path(__file__).parent
 SKILLS_SOURCE = PACKAGE_DIR.parent.parent / "skills"
 
+def _get_graph() -> KnowledgeGraph:
+    """Initialize and return local knowledge graph."""
+    LOCAL_DB_DIR.mkdir(exist_ok=True)
+    return KnowledgeGraph(LOCAL_DB_PATH)
 
-def _get_skills_dir(target: Optional[str] = None) -> Path:
-    """Resolve target skills directory."""
-    if target:
-        return Path(target)
-    return DEFAULT_SKILLS_DIR
+@app.command()
+def index(
+    root: str = typer.Option(".", "--root", "-r", help="Root directory to scan"),
+    full: bool = typer.Option(False, "--full", "-f", help="Force full scan instead of incremental"),
+):
+    """🔍 Build/Update local knowledge graph (Smart & Incremental)."""
+    root_path = Path(root)
+    graph = _get_graph()
+    parser = CodebaseParser(root_path)
+    
+    files_to_scan = None
+    status_msg = "Scanning all files..."
+    
+    # Smart Detection: Use git to find modified files if not a full scan
+    if not full and (root_path / ".git").exists():
+        try:
+            import subprocess
+            # Get modified and untracked files
+            git_out = subprocess.check_output(
+                ["git", "status", "--porcelain"], 
+                cwd=root_path, text=True
+            )
+            files_to_scan = []
+            for line in git_out.splitlines():
+                if line.endswith(".py"):
+                    # Extract path (line format: ' M path/to/file.py' or '?? path/to/file.py')
+                    rel_path = line[3:].strip()
+                    files_to_scan.append(root_path / rel_path)
+            
+            if files_to_scan:
+                status_msg = f"Incremental scan: {len(files_to_scan)} files changed."
+            else:
+                console.print("[blue]ℹ️  No changes detected in Git. Use --full to force re-index.[/blue]")
+                return
+        except Exception:
+            pass # Fallback to full scan if git fails
+            
+    with console.status(f"[bold green]{status_msg}"):
+        parser.scan(files=files_to_scan)
+        
+        indexed_count = 0
+        for name, sym in parser.symbols.items():
+            graph.update_symbol({
+                "name": sym.name,
+                "type": sym.type,
+                "file_path": sym.file_path,
+                "line": sym.line,
+                "end_line": sym.end_line,
+                "docstring": sym.docstring,
+                "calls": sym.calls
+            })
+            indexed_count += 1
+            
+    console.print(Panel(
+        f"✅ Indexed [bold]{indexed_count}[/bold] symbols from {len(files_to_scan) if files_to_scan else 'all'} files.\n"
+        f"📁 Database: {LOCAL_DB_PATH}",
+        title="🧠 Smart Indexing Complete",
+        border_style="green",
+    ))
 
+@app.command()
+def ask_brain(
+    query: str = typer.Argument(..., help="What problem are you trying to solve?"),
+):
+    """🧠 Ask the brain for past solutions, bug fixes, or architectural choices."""
+    graph = _get_graph()
+    results = graph.query_patterns(query)
+    
+    if not results:
+        console.print(f"[yellow]Brain has no memory of '{query}'. Recording a new TIL might help later.[/yellow]")
+        return
 
-def _count_patterns(skill_path: Path) -> int:
-    """Count pattern entries in a SKILL.md file."""
-    skill_file = skill_path / "SKILL.md"
-    if not skill_file.exists():
-        return 0
-    content = skill_file.read_text(encoding="utf-8", errors="replace")
-    # Count ### headings that look like pattern entries
-    count = 0
-    for line in content.splitlines():
-        stripped = line.strip()
-        if stripped.startswith("### ") and any(
-            marker in stripped
-            for marker in ["P", "RB-", "ADR-", "PP-", "CS-", "PERF-", "SA-"]
-        ):
-            count += 1
-    return count
+    console.print(Panel(f"🧠 Searching brain for: [bold cyan]{query}[/bold cyan]", border_style="blue"))
+    
+    for r in results:
+        color = "green" if r['type'] == "TIL" else "magenta" if r['type'] == "ADR" else "red"
+        title = f"[{r['type']}] {r['name']}"
+        
+        content = r['content']
+        if r['tags']:
+            content += f"\n\n[dim]Tags: {r['tags']}[/dim]"
+            
+        console.print(Panel(content, title=title, border_style=color))
 
+@app.command()
+def query(
+    q: str = typer.Argument(..., help="Search query (symbol name, file path, or pattern)"),
+    type: Optional[str] = typer.Option(None, "--type", "-t", help="Search type (symbol or pattern)"),
+):
+    """🔎 Query the knowledge graph for symbols or learned patterns."""
+    graph = _get_graph()
+    
+    results = []
+    if type == "symbol" or not type:
+        results.extend(graph.query_symbol(q))
+    if type == "pattern" or not type:
+        results.extend(graph.query_patterns(q))
+        
+    if not results:
+        console.print(f"[yellow]No results found for '{q}'[/yellow]")
+        return
+
+    table = Table(title=f"🔎 Search Results for '{q}'")
+    table.add_column("Type", style="cyan")
+    table.add_column("Name", style="bold green")
+    table.add_column("Location/Meta", style="dim")
+    
+    for r in results:
+        if 'file_path' in r: # Symbol
+            loc = f"{r['file_path']}:{r['line']}"
+            table.add_row(r['type'].upper(), r['name'], loc)
+        else: # Pattern
+            table.add_row(f"LEARNED:{r['type']}", r['name'], r['tags'] or "—")
+            
+    console.print(table)
+    
+    # If exactly one result, show details
+    if len(results) == 1:
+        r = results[0]
+        if 'docstring' in r and r['docstring']:
+            console.print(Panel(r['docstring'], title="Docstring", border_style="blue"))
+        if 'content' in r and r['content']:
+            console.print(Panel(r['content'], title="Content", border_style="magenta"))
+
+@app.command()
+def learn(
+    pattern_type: str = typer.Argument(..., help="Pattern type (TIL, ADR, RCA, PERF, SMELL)"),
+    name: str = typer.Argument(..., help="Brief title of the pattern"),
+    content: str = typer.Option(..., "--content", "-c", help="Full description of the pattern"),
+    tags: str = typer.Option("", "--tags", help="Comma-separated tags"),
+):
+    """🧠 Record a new self-learned pattern to the local graph."""
+    graph = _get_graph()
+    graph.add_pattern(pattern_type, name, content, tags)
+    
+    # Also sync to Markdown skills if possible
+    # (Future: implement auto-markdown-sync)
+    
+    console.print(f"[green]✅ Learned new {pattern_type}: [bold]{name}[/bold][/green]")
 
 @app.command()
 def install(
@@ -227,6 +350,13 @@ def export(
     output_path.write_text("\n".join(lines), encoding="utf-8")
     console.print(f"[green]✅ Exported to: {output_path.absolute()}[/green]")
 
+
+@app.command()
+def mcp():
+    """🚀 Start the MCP server for Antigravity Self-Learning."""
+    from antigravity_learn.mcp_server import mcp as server
+    console.print("[bold blue]🚀 Starting Antigravity MCP Server...[/bold blue]")
+    server.run()
 
 @app.command()
 def version():
