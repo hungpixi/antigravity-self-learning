@@ -70,6 +70,10 @@ type: reference
 - Enterprise Agent không kết nối lỏng lẻo với Data + LLM, mà hoạt động trên Ontology (Mô hình khái niệm hóa doanh nghiệp). Agent tự động thừa kế mọi Rule Governance của con người, không thể xem data vượt quyền.
 - **Shared Sandbox:** Cho phép Manager là người thật nhảy vào cùng mô phỏng Sandbox giả lập với AI trước khi commit thay đổi vào DB.
 
+### 4. Codebase Context Graph (Tích hợp Grapuco)
+- **Kiểm soát Dependency bằng Knowledge Graph:** Cải thiện hệ thống Harness bằng việc sử dụng Grapuco. Thay vì để AI tự dò dẫm file cấu trúc, Harness bắt buộc AI phải truy vấn đồ thị tri thức (Knowledge Graph) của Grapuco (qua MCP Server với các tool `get_dependencies`, `semantic_search`) để nắm rõ kiến trúc tổng thể và luồng dữ liệu (data flow) một cách chính xác.
+- **Security Dependency Lock (Kiểm duyệt Kiến trúc):** Grapuco đóng vai trò như một lớp "Security Hook" thứ hai, khóa các thay đổi có nguy cơ phá vỡ dependency cốt lõi. Bất kỳ refactor nào từ Generator đều phải vượt qua phân tích đồ thị trước khi sang Evaluator, giảm thiểu rủi ro regression tối đa.
+
 ## Phần 5: The Virtual Company Framework & Định Hướng Mới
 
 1. **Framework "Paper Clip" (Cost Tracking & Roles):** Tổ chức AI như công ty ảo (CEO, CTO, CMO...). Đặc biệt phải có Ledger theo dõi Costs (Token API) realtime trên từng Agent để thay đổi Model đắt/rẻ hợp lý.
