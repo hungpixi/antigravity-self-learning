@@ -352,6 +352,39 @@ def export(
 
 
 @app.command()
+def skeleton(
+    root: str = typer.Option(".", "--root", "-r", help="Root directory"),
+):
+    """🦴 Show codebase skeleton (signatures only) to minimize prompt tokens."""
+    graph = _get_graph()
+    # Fuzzy search for everything to get all symbols
+    results = graph.query_symbol("")
+    
+    if not results:
+        console.print("[yellow]No symbols indexed. Run: antigravity-learn index --full[/yellow]")
+        return
+
+    # Group by file
+    files: Dict[str, List[Dict[str, Any]]] = {}
+    for r in results:
+        files.setdefault(r['file_path'], []).append(r)
+        
+    output = ["# 🦴 Codebase Skeleton\n"]
+    for file_path, symbols in sorted(files.items()):
+        output.append(f"## 📄 {file_path}")
+        for s in sorted(symbols, key=lambda x: x['line']):
+            indent = "  " if s['type'] == "method" else ""
+            sig = s['signature'] or f"{s['type']} {s['name']}"
+            output.append(f"{indent}{sig}:")
+            if s['docstring']:
+                # Shorten docstring to first line
+                doc = s['docstring'].splitlines()[0].strip()
+                output.append(f"{indent}    \"\"\"{doc}...\"\"\"")
+        output.append("")
+        
+    console.print("\n".join(output))
+
+@app.command()
 def mcp():
     """🚀 Start the MCP server for Antigravity Self-Learning."""
     from antigravity_learn.mcp_server import mcp as server

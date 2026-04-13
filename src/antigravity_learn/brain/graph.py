@@ -22,10 +22,17 @@ class KnowledgeGraph:
                 line INTEGER,
                 end_line INTEGER,
                 docstring TEXT,
+                signature TEXT,
                 calls TEXT, -- Comma-separated list of function names
                 last_indexed TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
             """)
+            
+            # Migration: Add signature if it doesn't exist
+            try:
+                cursor.execute("ALTER TABLE symbols ADD COLUMN signature TEXT")
+            except sqlite3.OperationalError:
+                pass # Already exists
             
             # 2. Self-Learning Patterns (TIL, ADR, RCA)
             cursor.execute("""
@@ -53,17 +60,17 @@ class KnowledgeGraph:
             if row:
                 cursor.execute("""
                 UPDATE symbols SET 
-                    type = ?, line = ?, end_line = ?, docstring = ?, calls = ?, last_indexed = CURRENT_TIMESTAMP
+                    type = ?, line = ?, end_line = ?, docstring = ?, signature = ?, calls = ?, last_indexed = CURRENT_TIMESTAMP
                 WHERE id = ?
                 """, (symbol_data['type'], symbol_data['line'], symbol_data['end_line'], 
-                      symbol_data.get('docstring'), ",".join(symbol_data.get('calls', [])), row[0]))
+                      symbol_data.get('docstring'), symbol_data.get('signature'), ",".join(symbol_data.get('calls', [])), row[0]))
             else:
                 cursor.execute("""
-                INSERT INTO symbols (name, type, file_path, line, end_line, docstring, calls)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO symbols (name, type, file_path, line, end_line, docstring, signature, calls)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """, (symbol_data['name'], symbol_data['type'], symbol_data['file_path'], 
                       symbol_data['line'], symbol_data['end_line'], symbol_data.get('docstring'), 
-                      ",".join(symbol_data.get('calls', []))))
+                      symbol_data.get('signature'), ",".join(symbol_data.get('calls', []))))
             conn.commit()
 
     def query_symbol(self, query: str) -> List[Dict[str, Any]]:

@@ -3,13 +3,14 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 class Symbol:
-    def __init__(self, name: str, type: str, line: int, end_line: int, file_path: str, docstring: Optional[str] = None):
+    def __init__(self, name: str, type: str, line: int, end_line: int, file_path: str, docstring: Optional[str] = None, signature: Optional[str] = None):
         self.name = name
         self.type = type  # 'function', 'class', 'method'
         self.line = line
         self.end_line = end_line
         self.file_path = file_path
         self.docstring = docstring
+        self.signature = signature # e.g. "def func(a, b):"
         self.calls: List[str] = []
         self.callers: List[str] = []
 
@@ -32,16 +33,24 @@ class CodebaseParser:
 
         relative_path = str(file_path.relative_to(self.root_dir))
         
+        lines = content.splitlines()
+        
         for node in ast.walk(tree):
             # Extract Functions
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                # Get signature (first line of definition)
+                signature = lines[node.lineno - 1].strip()
+                if signature.endswith(":"):
+                    signature = signature[:-1]
+
                 symbol = Symbol(
                     name=node.name,
                     type="function" if not self._is_method(node) else "method",
                     line=node.lineno,
                     end_line=getattr(node, "end_lineno", node.lineno),
                     file_path=relative_path,
-                    docstring=ast.get_docstring(node)
+                    docstring=ast.get_docstring(node),
+                    signature=signature
                 )
                 
                 # Simple call extraction (functions called within this function)
@@ -54,13 +63,18 @@ class CodebaseParser:
 
             # Extract Classes
             elif isinstance(node, ast.ClassDef):
+                signature = lines[node.lineno - 1].strip()
+                if signature.endswith(":"):
+                    signature = signature[:-1]
+
                 symbol = Symbol(
                     name=node.name,
                     type="class",
                     line=node.lineno,
                     end_line=getattr(node, "end_lineno", node.lineno),
                     file_path=relative_path,
-                    docstring=ast.get_docstring(node)
+                    docstring=ast.get_docstring(node),
+                    signature=signature
                 )
                 self.symbols[f"{relative_path}::{node.name}"] = symbol
 
